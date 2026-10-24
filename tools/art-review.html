@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="pt">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  /><title>Galeria de sprites — Dragon Ball Survivors</title
+  ><style>
+    body {
+      background: #102f3a;
+      color: #f5deb0;
+      font: 14px system-ui;
+      margin: 24px;
+    }
+    canvas {
+      display: block;
+      max-width: 100%;
+      image-rendering: pixelated;
+      background: #214d4b;
+      border: 1px solid #739b8b;
+    }
+    button,
+    select {
+      padding: 9px;
+      margin: 8px;
+      background: #1a3b48;
+      color: #ffe4aa;
+      border: 1px solid #78988e;
+    }
+    h1 {
+      font-size: 24px;
+    }
+    p {
+      color: #b9d1cb;
+    }
+  </style>
+  <h1>Dragon Ball Survivors · Galeria de sprites</h1>
+  <p>PNG originais locais. A galeria não altera a partida.</p>
+  <label
+    >Direção
+    <select id="direction">
+      <option value="south">Sul</option>
+      <option value="west">Oeste</option>
+      <option value="east">Este</option>
+      <option value="north">Norte</option>
+    </select></label
+  ><label><input type="checkbox" id="walk" checked />Caminhada</label
+  ><canvas id="review" width="1260" height="780"></canvas>
+  <p id="status">A carregar todas as transformações…</p>
+  <script type="module">
+    import { characters } from "../src/characters.js";
+    import {
+      ready,
+      prepareCharacter,
+      drawFighter,
+      assetStatus,
+    } from "../src/sprites.js";
+    const canvas = document.querySelector("canvas"),
+      ctx = canvas.getContext("2d");
+    await ready;
+    await Promise.all(characters.map((c) => prepareCharacter(c.id)));
+    document.querySelector("#status").textContent =
+      "20 folhas de personagens · 320 frames de origem · 4 direções. Buu e Krillin evoluem técnicas sem alterar a identidade física.";
+    function frame(now) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.imageSmoothingEnabled = false;
+      characters.forEach((c, row) => {
+        ctx.fillStyle = "#f9d181";
+        ctx.font = "bold 15px monospace";
+        ctx.fillText(c.name, 15, row * 155 + 24);
+        const count = c.id === "buu" || c.id === "krillin" ? 1 : c.forms.length;
+        for (let i = 0; i < count; i++) {
+          ctx.save();
+          ctx.translate(88 + i * 174, row * 155 + 100);
+          drawFighter(
+            ctx,
+            c,
+            i,
+            now / 1000,
+            document.querySelector("#direction").value,
+            document.querySelector("#walk").checked,
+          );
+          ctx.restore();
+          ctx.textAlign = "center";
+          ctx.fillStyle = "#c6e5da";
+          ctx.font = "12px monospace";
+          ctx.fillText(c.forms[i], 88 + i * 174, row * 155 + 139);
+          ctx.textAlign = "left";
+        }
+      });
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  </script>
+</html>

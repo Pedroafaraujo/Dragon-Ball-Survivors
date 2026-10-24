@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#071d27" />
+    <title>Dragon Ball Survivors</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <canvas id="game" aria-label="Arena de combate"></canvas>
+    <main id="overlay"></main>
+    <div id="hud" hidden>
+      <div class="top">
+        <div>
+          <small>VITALIDADE</small>
+          <div class="bar"><i id="hp"></i></div>
+        </div>
+        <strong id="form"></strong
+        ><button id="pause" aria-label="Pausar">Ⅱ</button>
+      </div>
+      <div class="stats">
+        <span id="level"></span><strong id="timer"></strong
+        ><span id="kills"></span>
+      </div>
+      <div class="xp"><i id="xp"></i></div>
+      <div id="notice" role="status"></div>
+      <div class="help">WASD / SETAS · ATAQUES AUTOMÁTICOS</div>
+    </div>
+    <div id="stick" hidden><i></i></div>
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>

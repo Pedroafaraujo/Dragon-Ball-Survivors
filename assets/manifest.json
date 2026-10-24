@@ -1,0 +1,230 @@
+{
+  "version": 1,
+  "columns": 4,
+  "directions": [
+    "south",
+    "west",
+    "east",
+    "north"
+  ],
+  "playerFrames": {
+    "idle": [
+      0,
+      2
+    ],
+    "walk": [
+      1,
+      2,
+      3
+    ]
+  },
+  "sheets": [
+    {
+      "key": "goku-base",
+      "file": "sprites/goku-base.png",
+      "rows": 4,
+      "frames": 16,
+      "cell": 96,
+      "runtime": "packed/sprites/goku-base.png",
+      "source": "source/sprites/goku-base.png"
+    },
+    {
+      "key": "goku-ssj",
+      "file": "sprites/goku-ssj.png",
+      "rows": 4,
+      "frames": 16,
+      "cell": 96,
+      "runtime": "packed/sprites/goku-ssj.png",
+      "source": "source/sprites/goku-ssj.png"
+    },
+    {
+      "key": "goku-ssj2",
+      "file": "sprites/goku-ssj2.png",
+      "rows": 4,
+      "frames": 16,
+      "cell": 96,
+      "runtime": "packed/sprites/goku-ssj2.png",
+      "source": "source/sprites/goku-ssj2.png"
+    },
+    {
+      "key": "goku-ssj3",
+      "file": "sprites/goku-ssj3.png",
+      "rows": 4,
+      "frames": 16,
+      "cell": 96,
+      "runtime": "packed/sprites/goku-ssj3.png",
+      "source": "source/sprites/goku-ssj3.png"
+    },
+    {
+      "key": "goku-god",
+      "file": "sprites/goku-god.png",
+      "rows": 4,
+      "frames": 16,
+      "cell": 96,
+      "runtime": "packed/sprites/goku-god.png",
+      "source": "source/sprites/goku-god.png"
+    },
+    {
+      "key": "goku-blue",
+      "file": "sprites/goku-blue.png",
+      "rows": 4,
+      "frames": 16,
+      "cell": 96,
+      "runtime": "packed/sprites/goku-blue.png",
+      "source": "source/sprites/goku-blue.png"
+    },
+    {
+      "key": "goku-ui",
+      "file": "sprites/goku-ui.png",
+      "rows": 4,
+      "frames": 16,
+      "cell": 96,
+      "runtime": "packed/sprites/goku-ui.png",
+      "source": "source/sprites/goku-ui.png"
+    },
+    {
+      "key": "vegeta-base",
+      "file": "sprites/vegeta-base.png",
+      "rows": 4,
+      "frames": 16,
+      "cell": 96,
+      "runtime": "packed/sprites/vegeta-base.png",
+      "source": "source/sprites/vegeta-base.png"
+    },
+    {
+      "key": "vegeta-ssj",
+      "file": "sprites/vegeta-ssj.png",
+      "rows": 4,
+      "frames": 16,
+      "cell": 96,
+      "runtime": "packed/sprites/vegeta-ssj.png",
+      "source": "source/sprites/vegeta-ssj.png"
+    },
+    {
+      "key": "vegeta-ssj2",
+      "file": "sprites/vegeta-ssj2.png",
+      "rows": 4,
+      "frames": 16,
+      "cell": 96,
+      "runtime": "packed/sprites/vegeta-ssj2.png",
+      "source": "source/sprites/vegeta-ssj2.png"
+    },
+    {
+      "key": "vegeta-god",
+      "file": "sprites/vegeta-god.png",
+      "rows": 4,
+      "frames": 16,
+      "cell": 96,
+      "runtime": "packed/sprites/vegeta-god.png",
+      "source": "source/sprites/vegeta-god.png"
+    },
+    {
+      "key": "vegeta-blue",
+      "file": "sprites/vegeta-blue.png",
+      "rows": 4,
+      "frames": 16,
+      "cell": 96,
+      "runtime": "packed/sprites/vegeta-blue.png",
+      "source": "source/sprites/vegeta-blue.png"
+    },
+    {
+      "key": "vegeta-ue",
+      "file": "sprites/vegeta-ue.png",
+      "rows": 4,
+      "frames": 16,
+      "cell": 96,
+      "runtime": "packed/sprites/vegeta-ue.png",
+      "source": "source/sprites/vegeta-ue.png"
+    },
+    {
+      "key": "gohan-base",
+      "file": "sprites/gohan-base.png",
+      "rows": 4,
+      "frames": 16,
+      "cell": 96,
+      "runtime": "packed/sprites/gohan-base.png",
+      "source": "source/sprites/gohan-base.png"
+    },
+    {
+      "key": "gohan-ssj",
+      "file": "sprites/gohan-ssj.png",
+      "rows": 4,
+      "frames": 16,
+      "cell": 96,
+      "runtime": "packed/sprites/gohan-ssj.png",
+      "source": "source/sprites/gohan-ssj.png"
+    },
+    {
+      "key": "gohan-ssj2",
+      "file": "sprites/gohan-ssj2.png",
+      "rows": 4,
+      "frames": 16,
+      "cell": 96,
+      "runtime": "packed/sprites/gohan-ssj2.png",
+      "source": "source/sprites/gohan-ssj2.png"
+    },
+    {
+      "key": "gohan-ultimate",
+      "file": "sprites/gohan-ultimate.png",
+      "rows": 4,
+      "frames": 16,
+      "cell": 96,
+      "runtime": "packed/sprites/gohan-ultimate.png",
+      "source": "source/sprites/gohan-ultimate.png"
+    },
+    {
+      "key": "gohan-beast",
+      "file": "sprites/gohan-beast.png",
+      "rows": 4,
+      "frames": 16,
+      "cell": 96,
+      "runtime": "packed/sprites/gohan-beast.png",
+      "source": "source/sprites/gohan-beast.png"
+    },
+    {
+      "key": "buu-base",
+      "file": "sprites/buu-base.png",
+      "rows": 4,
+      "frames": 16,
+      "cell": 96,
+      "runtime": "packed/sprites/buu-base.png",
+      "source": "source/sprites/buu-base.png"
+    },
+    {
+      "key": "krillin-base",
+      "file": "sprites/krillin-base.png",
+      "rows": 4,
+      "frames": 16,
+      "cell": 96,
+      "runtime": "packed/sprites/krillin-base.png",
+      "source": "source/sprites/krillin-base.png"
+    },
+    {
+      "key": "enemies",
+      "file": "sprites/enemies.png",
+      "rows": 9,
+      "frames": 36,
+      "cell": 96,
+      "runtime": "packed/sprites/enemies.png",
+      "source": "source/sprites/enemies.png"
+    },
+    {
+      "key": "namek",
+      "file": "tiles/namek.png",
+      "rows": 4,
+      "frames": 16,
+      "cell": 96,
+      "runtime": "packed/tiles/namek.png",
+      "source": "source/tiles/namek.png"
+    },
+    {
+      "key": "effects",
+      "file": "effects/ki.png",
+      "rows": 4,
+      "frames": 16,
+      "cell": 96,
+      "runtime": "packed/effects/ki.png",
+      "source": "source/effects/ki.png"
+    }
+  ]
+}
