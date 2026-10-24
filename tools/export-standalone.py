@@ -8,6 +8,7 @@ import sys
 root = Path(__file__).resolve().parent.parent
 output = Path(sys.argv[1]) if len(sys.argv) > 1 else root.parent / 'Dragon-Ball-Survivors.html'
 manifest = json.loads((root / 'assets/manifest.json').read_text())
+manifest['sheets'] += json.loads((root/'assets/animation-manifest.json').read_text())['sheets']
 images = {s['file']: 'data:image/png;base64,' + base64.b64encode((root/'assets'/s['runtime']).read_bytes()).decode() for s in manifest['sheets']}
 modules = {}
 for file in (root / 'src').glob('*.js'):

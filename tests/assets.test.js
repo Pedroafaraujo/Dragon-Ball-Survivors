@@ -39,7 +39,7 @@ test("all Saiyan forms have separate original PNGs, and no invented Buu/Krillin 
   }
   assert.equal(manifest.sheets.find((s) => s.key === "enemies").rows, 9);
 });
-test("Android runtime textures stay below 3 MiB and never reference source masters", () => {
+test("legacy base textures stay below 3 MiB and never reference source masters", () => {
   let total = 0;
   for (const sheet of manifest.sheets) {
     assert.ok(sheet.runtime.startsWith("packed/"));

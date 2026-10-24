@@ -4,41 +4,12 @@ import {
   drawCell,
   drawFighter,
   effect,
-  getSheet,
+  drawEnemySprite,
+  auraEffect,
+  beamEffect,
 } from "./sprites.js";
+import { renderPosition, handAnchor } from "./animation.js";
 
-// Facing and animation are presentation state, deliberately kept off game entities.
-const poses = new WeakMap();
-function pose(entity, time) {
-  let p = poses.get(entity);
-  if (!p) {
-    p = {
-      x: entity.x,
-      y: entity.y,
-      direction: "south",
-      moving: false,
-      lastMotion: time,
-    };
-    poses.set(entity, p);
-  }
-  const dx = entity.x - p.x,
-    dy = entity.y - p.y;
-  if (Math.abs(dx) + Math.abs(dy) > 0.02) {
-    p.direction =
-      Math.abs(dx) > Math.abs(dy)
-        ? dx < 0
-          ? "west"
-          : "east"
-        : dy < 0
-          ? "north"
-          : "south";
-    p.lastMotion = time;
-  }
-  p.moving = time - p.lastMotion < 0.1;
-  p.x = entity.x;
-  p.y = entity.y;
-  return p;
-}
 function shadow(ctx, x, y, r = 15) {
   ctx.fillStyle = "#102e4470";
   ctx.fillRect(Math.round(x - r), Math.round(y - 3), r * 2, 6);
@@ -51,6 +22,7 @@ export function fighter(
   time = 0,
   direction = "south",
   moving = false,
+  anim = null,
 ) {
   ctx.save();
   ctx.imageSmoothingEnabled = false;
@@ -58,22 +30,53 @@ export function fighter(
   if (form > 0) {
     ctx.save();
     ctx.globalAlpha = 0.65;
-    effect(
+    const formName = c.forms[form];
+    const cadence =
+      formName === "Ultra Instinct"
+        ? 5
+        : formName === "Ultra Ego"
+          ? 11
+          : formName === "SSJ2"
+            ? 12
+            : formName === "SSJ3"
+              ? 10
+              : 8;
+    const drawn = auraEffect(
       ctx,
-      3,
-      Math.floor(time * 8) % 4,
+      c.id === "buu" ? "Ultra Ego" : formName,
+      Math.floor(time * cadence) % 4,
       0,
       -17,
-      84,
-      112,
-      appearance(c, form).aura,
+      formName === "SSJ3" ? 98 : 84,
+      formName === "SSJ3" ? 132 : c.id === "krillin" ? 86 : 112,
     );
+    if (!drawn)
+      effect(
+        ctx,
+        3,
+        Math.floor(time * 8) % 4,
+        0,
+        -17,
+        84,
+        112,
+        appearance(c, form).aura,
+      );
+    if (formName === "SSJ2") {
+      ctx.strokeStyle = "#8be8ff";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      const side = Math.floor(time * 14) % 2 ? 1 : -1;
+      ctx.moveTo(side * 28, -42);
+      ctx.lineTo(side * 21, -22);
+      ctx.lineTo(side * 29, -18);
+      ctx.lineTo(side * 23, 3);
+      ctx.stroke();
+    }
     ctx.restore();
   }
-  drawFighter(ctx, c, form, time, direction, moving);
+  drawFighter(ctx, c, form, time, direction, moving, anim);
   ctx.restore();
 }
-const ginyuRows = { Guldo: 2, Recoome: 3, Burter: 4, Jeice: 5, Ginyu: 6 };
 const lakes = [
   { x: 1430, y: 1420, w: 250, h: 210, variant: 0 },
   { x: 2070, y: 1970, w: 330, h: 250, variant: 1 },
@@ -158,95 +161,169 @@ function obstacle(ctx, o, index) {
     size,
   );
 }
-function enemy(ctx, e, time) {
-  const p = pose(e, time),
-    row =
-      e.type === "saibaman"
-        ? 0
-        : e.type === "soldier"
-          ? 1
-          : e.type === "ginyu"
-            ? (ginyuRows[e.name] ?? 6)
-            : e.phase === 2
-              ? 8
-              : 7;
-  const size = e.type === "freeza" ? 126 : Math.max(67, e.r * 4.6);
+function enemy(ctx, e, time, alpha = 1) {
+  const size = e.type === "freeza" ? 126 : Math.max(67, e.r * 4.6),
+    pos = renderPosition(e, alpha);
   ctx.save();
-  ctx.translate(Math.round(e.x), Math.round(e.y));
+  ctx.translate(Math.round(pos.x), Math.round(pos.y));
   shadow(ctx, 0, e.r, e.r);
-  if (e.type === "freeza" && e.phase === 2) {
-    ctx.save();
-    ctx.globalAlpha = 0.6;
+  if (e.life !== undefined) ctx.globalAlpha = Math.min(1, e.life / 0.3);
+  if (e.hit > 0) ctx.globalAlpha *= 0.75;
+  if (e.bossCast && !e.bossCast.released) {
+    const hand = handAnchor(e, e.anim?.direction || "south");
     effect(
       ctx,
-      3,
-      Math.floor(time * 8) % 4,
       0,
-      -9,
-      size,
-      size * 1.15,
-      "#d470f2",
+      Math.floor(time * 12) % 4,
+      hand.x - e.x,
+      hand.y - e.y,
+      25 + e.bossCast.time * 45,
+      25 + e.bossCast.time * 45,
+      "#da7bed",
     );
-    ctx.restore();
   }
-  if (e.hit > 0) ctx.globalAlpha = 0.7;
-  if (p.direction === "west") ctx.scale(-1, 1);
-  drawCell(
-    ctx,
-    "enemies",
-    p.moving ? 1 + (Math.floor(time * 8 + e.r) % 3) : 0,
-    row,
-    -size / 2,
-    e.r - size + size * 0.125,
-    size,
-    size,
-  );
+  drawEnemySprite(ctx, e, size);
   ctx.restore();
-  if (e.hp < e.maxHp) {
+  if (e.hp > 0 && e.hp < e.maxHp) {
     ctx.fillStyle = "#142a36";
-    ctx.fillRect(Math.round(e.x - e.r), Math.round(e.y - e.r - 34), e.r * 2, 3);
+    ctx.fillRect(
+      Math.round(pos.x - e.r),
+      Math.round(pos.y - e.r - 34),
+      e.r * 2,
+      3,
+    );
     ctx.fillStyle = "#ffbf7a";
     ctx.fillRect(
-      Math.round(e.x - e.r),
-      Math.round(e.y - e.r - 34),
+      Math.round(pos.x - e.r),
+      Math.round(pos.y - e.r - 34),
       e.r * 2 * Math.max(0, e.hp / e.maxHp),
       3,
     );
   }
 }
-function kiBeam(ctx, l, time) {
-  const length = Math.hypot(l.tx - l.x, l.ty - l.y),
-    angle = Math.atan2(l.ty - l.y, l.tx - l.x);
+
+function kiBeam(ctx, l, time, offset = { x: 0, y: 0 }) {
+  const phase = Math.max(0, Math.min(1, (l.life - l.t) / l.life)),
+    length = l.length * Math.min(1, phase / 0.32),
+    angle = l.angle;
+  const envelope = Math.min(1, (phase + 0.05) * 8, (1 - phase) * 8),
+    width = Math.max(2, Math.min(84, l.width) * envelope);
   ctx.save();
-  ctx.translate(l.x, l.y);
+  ctx.translate(Math.round(l.x + offset.x), Math.round(l.y + offset.y));
   ctx.rotate(angle);
-  ctx.globalAlpha = Math.min(1, l.t * 5);
-  ctx.fillStyle = l.color;
-  ctx.fillRect(0, -l.width / 2, length, l.width);
-  ctx.fillStyle = "#e8ffff";
-  ctx.fillRect(
-    0,
-    -Math.max(2, l.width * 0.12),
-    length,
-    Math.max(4, l.width * 0.24),
-  );
-  // Repeated animated PNG cores add pixel coronas without per-frame filters.
-  const step = Math.max(45, l.width * 1.5),
-    count = Math.min(18, Math.ceil(length / step));
-  for (let i = 0; i < count; i++)
+  ctx.globalAlpha = 0.85;
+  if (l.kind === "elastic") {
+    ctx.fillStyle = "#a94e87";
+    ctx.fillRect(0, -width * 0.5, length, width);
+    ctx.fillStyle = "#f1a4c8";
+    ctx.fillRect(0, -width * 0.3, length, width * 0.6);
+    effect(ctx, 0, Math.floor(time * 12) % 4, length, 0, 26, 20, "#f1a4c8");
+  } else {
+    ctx.fillStyle = l.color;
+    ctx.globalAlpha = 0.24;
+    ctx.fillRect(0, -width * 0.85, length, width * 1.7);
+    ctx.globalAlpha = 0.95;
+    ctx.fillRect(0, -width * 0.5, length, width);
+    ctx.fillStyle = "#edfaff";
+    ctx.fillRect(
+      0,
+      -Math.max(1, width * 0.19),
+      length,
+      Math.max(2, width * 0.38),
+    );
+    const step = l.kind === "helix" ? 12 : 22,
+      offset = (time * 180) % step;
+    for (let x = offset; x < length; x += step) {
+      const y = Math.sin(x * 0.09 - time * 24) * width * 0.5;
+      ctx.fillStyle = l.kind === "helix" ? "#ffdb7e" : "#c8ffff";
+      ctx.fillRect(Math.round(x), Math.round(y) - 2, 5, 4);
+      if (l.kind === "helix")
+        ctx.fillRect(Math.round(x), Math.round(-y) - 1, 4, 3);
+    }
+    if (l.key === "kamehameha" || l.key === "cannon")
+      beamEffect(
+        ctx,
+        l.kind === "helix",
+        Math.floor(time * 14) % 4,
+        length,
+        0,
+        Math.max(32, width * 2.2),
+        Math.max(24, width * 1.7),
+      );
+    else
+      effect(
+        ctx,
+        0,
+        Math.floor(time * 14) % 4,
+        length,
+        0,
+        Math.max(20, width * 2),
+        Math.max(20, width * 1.8),
+        l.color,
+      );
+  }
+  ctx.restore();
+}
+function castEffects(g, alpha = 1) {
+  const ctx = g.ctx,
+    pp = renderPosition(g.player, alpha);
+  for (const cast of g.casts || []) {
+    if (
+      cast.released ||
+      (cast.channel === 0 && (g.player.anim?.action?.priority || 0) > 4)
+    )
+      continue;
+    const d = cast.def,
+      progress = Math.min(1, cast.elapsed / (d.windup + d.charge)),
+      hand = handAnchor(pp, cast.direction, d.hand);
+    const size =
+      (cast.channel === 0
+        ? 10
+        : cast.key === "genki" || cast.key === "planet"
+          ? 28
+          : 14) +
+      progress * (cast.channel === 2 ? 55 : 25);
+    effect(
+      ctx,
+      cast.key === "kienzan" || cast.key === "discs" ? 1 : 0,
+      Math.floor(cast.elapsed * 12) % 4,
+      hand.x,
+      hand.y,
+      size,
+      cast.key === "kienzan" || cast.key === "discs" ? size * 0.45 : size,
+      d.color,
+    );
+    if (cast.channel > 0 && !g.save.reduced) {
+      ctx.fillStyle = d.color;
+      for (let i = 0; i < 6; i++) {
+        const a = (i / 6) * Math.PI * 2 + cast.elapsed * 3,
+          r = 45 * (1 - progress) + 10;
+        ctx.fillRect(
+          Math.round(hand.x + Math.cos(a) * r),
+          Math.round(hand.y + Math.sin(a) * r),
+          2,
+          2,
+        );
+      }
+    }
+  }
+  for (const orb of g.orbs || []) {
+    const size = orb.key === "bang" ? 36 : orb.key === "genki" ? 76 : 90;
+    const position = renderPosition(orb, alpha);
     effect(
       ctx,
       0,
-      Math.floor(time * 12 + i) % 4,
-      ((i + 0.5) * length) / count,
-      0,
-      Math.max(40, l.width * 2),
-      Math.max(35, l.width * 1.7),
-      l.color,
+      Math.floor(orb.age * 12) % 4,
+      position.x,
+      position.y,
+      size,
+      size,
+      orb.color,
     );
-  ctx.restore();
+  }
 }
-export function draw(g) {
+
+export function draw(g, alpha = 1) {
   const { ctx, width: w, height: h } = g;
   ctx.setTransform(g.dpr, 0, 0, g.dpr, 0, 0);
   ctx.imageSmoothingEnabled = false;
@@ -254,10 +331,12 @@ export function draw(g) {
   ctx.fillRect(0, 0, w, h);
   if (!assetStatus.ready) return;
   const p = g.player || { x: 1800, y: 1800 },
-    shake =
-      g.flash > 0 && g.save.shake ? Math.sin(g.time * 100) * g.flash * 5 : 0;
-  const ox = Math.round(w / 2 - p.x + shake),
-    oy = Math.round(h / 2 - p.y);
+    pos = g.player ? renderPosition(p, alpha) : p,
+    shake = g.save.shake
+      ? Math.sin(g.time * 100) * Math.max(g.flash * 5, (g.trauma || 0) * 7)
+      : 0;
+  const ox = Math.round(w / 2 - pos.x + shake),
+    oy = Math.round(h / 2 - pos.y);
   ctx.save();
   ctx.translate(ox, oy);
   terrain(g, ox, oy);
@@ -275,61 +354,94 @@ export function draw(g) {
       entities.push({ y: o.y + o.r, kind: "obstacle", o, index });
   });
   for (const e of g.enemies)
-    if (visible(e.x, e.y, 150, ox, oy, w, h))
+    if (e.hp > 0 && visible(e.x, e.y, 150, ox, oy, w, h))
       entities.push({ y: e.y + e.r, kind: "enemy", o: e });
+  for (const corpse of g.corpses || [])
+    entities.push({ y: corpse.y + corpse.r, kind: "enemy", o: corpse });
   if (g.player) entities.push({ y: p.y + 18, kind: "player", o: p });
   entities.sort((a, b) => a.y - b.y);
   for (const e of entities) {
     if (e.kind === "obstacle") obstacle(ctx, e.o, e.index);
-    else if (e.kind === "enemy") enemy(ctx, e.o, g.time);
+    else if (e.kind === "enemy") enemy(ctx, e.o, g.time, alpha);
     else {
-      const facing = pose(p, g.time);
+      const visualForm =
+        p.anim?.action?.state === "transform" &&
+        p.anim.action.elapsed / p.anim.action.duration < 0.5
+          ? (p.anim.formFrom ?? p.form)
+          : p.form;
       ctx.save();
-      ctx.translate(Math.round(p.x), Math.round(p.y));
+      ctx.translate(Math.round(pos.x), Math.round(pos.y));
       if (p.invuln > 0) ctx.globalAlpha = 0.45 + Math.sin(g.time * 40) * 0.3;
       fighter(
         ctx,
         g.character,
-        p.form,
+        visualForm,
         g.time,
-        facing.direction,
-        facing.moving,
+        p.anim?.direction || "south",
+        p.anim?.motion !== "idle",
+        p.anim,
       );
       ctx.restore();
     }
   }
+  if (g.player) castEffects(g, alpha);
   for (const b of g.bullets) {
-    const size = b.disc ? 42 : 30;
+    const size = b.disc ? 42 : 30,
+      position = renderPosition(b, alpha);
     effect(
       ctx,
       b.disc ? 1 : 0,
       Math.floor(g.time * 12) % 4,
-      b.x,
-      b.y,
+      position.x,
+      position.y,
       size,
       b.disc ? 24 : size,
       b.color,
     );
   }
-  for (const b of g.hostile)
-    effect(ctx, 0, Math.floor(g.time * 12) % 4, b.x, b.y, 32, 32, "#ed74d0");
-  for (const l of g.lines) kiBeam(ctx, l, g.time);
+  for (const b of g.hostile) {
+    const position = renderPosition(b, alpha);
+    effect(
+      ctx,
+      0,
+      Math.floor(g.time * 12) % 4,
+      position.x,
+      position.y,
+      32,
+      32,
+      "#ed74d0",
+    );
+  }
+  for (const l of g.lines.slice(-8))
+    kiBeam(ctx, l, g.time, { x: pos.x - p.x, y: pos.y - p.y });
   for (const r of g.rings) {
     ctx.save();
-    ctx.globalAlpha = Math.min(1, r.t * 2);
+    ctx.globalAlpha = Math.min(1, r.t * 3);
     effect(
       ctx,
       2,
-      Math.min(3, Math.floor(((0.65 - r.t) / 0.65) * 4)),
+      Math.min(3, Math.floor(((r.life - r.t) / r.life) * 4)),
       r.x,
       r.y,
-      r.r * 2,
-      r.r * 2,
+      Math.min(640, r.r * 2),
+      Math.min(640, r.r * 2),
       r.color,
     );
     ctx.restore();
   }
   g.effects.draw(ctx);
+  ctx.textAlign = "center";
+  ctx.font = "bold 11px monospace";
+  for (const f of g.feedback || []) {
+    ctx.globalAlpha = Math.min(1, f.t * 4);
+    ctx.fillStyle = "#ffe7a0";
+    ctx.fillText(
+      String(f.damage),
+      Math.round(f.x),
+      Math.round(f.y - (0.55 - f.t) * 24),
+    );
+  }
+  ctx.globalAlpha = 1;
   ctx.restore();
   if (g.flash > 0) {
     ctx.fillStyle = `rgba(239,244,209,${g.flash * 0.3})`;

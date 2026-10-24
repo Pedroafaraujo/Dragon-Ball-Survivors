@@ -27,6 +27,11 @@ const { chromium } = require("playwright");
       const { characters } = await import("./src/characters.js");
       const { draw } = await import("./src/render.js");
       await Promise.all(characters.map((c) => m.prepareCharacter(c.id)));
+      await Promise.all(
+        characters.flatMap((c) =>
+          m.FORM_FILES[c.id].map((_, i) => m.prepareAnimation(c.id, i)),
+        ),
+      );
       const canvas = document.createElement("canvas");
       canvas.width = canvas.height = 96;
       const ctx = canvas.getContext("2d");

@@ -65,6 +65,9 @@ const { chromium } = require("playwright");
     __game.player.hp = -1;
     __game.update(0.01);
   });
+  await page.waitForFunction(() =>
+    document.querySelector("h1")?.textContent.includes("terminou"),
+  );
   if (
     !(await page
       .locator("h1")

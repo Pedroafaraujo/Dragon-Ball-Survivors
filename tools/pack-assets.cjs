@@ -18,7 +18,19 @@ const path = require("node:path");
       await Promise.all(
         Object.keys(m.FORM_FILES).map((id) => m.prepareCharacter(id)),
       );
-      if (m.sheetErrors().length) throw Error(m.sheetErrors().join("\n"));
+      await Promise.all([
+        m.loadSheet("enemies", "sprites/enemies.png", 9, 62),
+        m.loadSheet("namek", "tiles/namek.png", 4, 80, false),
+        m.loadSheet("effects", "effects/ki.png", 4, 80, false),
+      ]);
+      const errors = m
+        .sheetErrors()
+        .filter(
+          (message) =>
+            !message.includes("animation/") &&
+            !message.includes("effects/auras.png"),
+        );
+      if (errors.length) throw Error(errors.join("\n"));
       const keys = Object.entries(m.FORM_FILES)
         .flatMap(([id, forms]) => forms.map((f) => `${id}-${f}`))
         .concat(["enemies", "namek", "effects"]);

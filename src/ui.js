@@ -1,6 +1,6 @@
 import { characters } from "./characters.js";
 import { fighter } from "./render.js";
-import { assetStatus, prepareCharacter } from "./sprites.js";
+import { assetStatus, prepareCharacter, prepareAnimation } from "./sprites.js";
 import { State, choices, persist, xpNeeded } from "./states.js";
 import { upgrades } from "./config.js";
 const $ = (id) => document.getElementById(id);
@@ -83,6 +83,7 @@ export class UI {
   }
   level() {
     const g = this.g;
+    prepareAnimation(g.character.id, g.player.form).catch(() => {});
     g.state = State.LEVEL;
     const options = choices(upgrades);
     this.show(

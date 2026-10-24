@@ -5,6 +5,7 @@ export const State = Object.freeze({
   LEVEL: "level",
   WIN: "win",
   LOSE: "lose",
+  ENDING: "ending",
 });
 export function loadSave() {
   try {

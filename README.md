@@ -1,118 +1,129 @@
 # Dragon Ball Survivors
 
-Jogo de sobrevivência 2D para navegador, com spritesheets PNG pixel art originais, animações e cenário de Namek redesenhado. O Canvas compõe os PNG; as personagens já não são construídas com figuras geométricas. HTML, CSS e JavaScript ES Modules, sem dependências de execução, imagens externas, APIs, contas ou backend. Interface em português.
+Jogo de sobrevivência 2D para navegador em HTML5 Canvas, CSS e JavaScript ES Modules. Este é o mesmo jogo existente, com uma reforma do movimento e das animações de combate. Cinco personagens, Namek, progressão por nível, ataques automáticos e Freeza com duas fases continuam disponíveis. Arte PNG original criada para o projeto; sem frameworks, APIs, imagens remotas ou backend.
 
-## Jogar localmente
+## Jogar
 
-Na pasta do projeto:
+A versão **`Dragon-Ball-Survivors.html`** inclui código e PNG num único ficheiro e pode ser aberta diretamente num navegador moderno. É maior porque inclui todas as formas e animações. Para desenvolvimento, é preferível a versão modular:
 
 ```sh
 python3 -m http.server 8000
 ```
 
-Abre `http://localhost:8000`. Alternativamente, `npm start` executa o mesmo servidor estático. Não abrir `index.html` diretamente com `file://`, pois os navegadores restringem módulos ES nesse modo. O servidor serve apenas ficheiros; o jogo não precisa de um serviço de aplicação. Node.js só é necessário para os testes.
+Abre `http://localhost:8000`. `npm start` executa o mesmo servidor estático. Não abras o `index.html` modular por `file://`: os módulos e PNG relativos precisam de HTTP.
 
-- **Computador:** WASD ou setas para mover; Escape ou botão Ⅱ para pausar.
-- **Android:** toca e arrasta na arena para criar o joystick; botão Ⅱ para pausar. Funciona em retrato e paisagem.
-- Os ataques são automáticos e apontam para o inimigo mais próximo no alcance de 650 unidades.
-- Recolhe cristais de experiência. Cada nível pausa o jogo e oferece três melhorias aleatórias diferentes.
-- As técnicas secundária e final desbloqueiam nos níveis 3 e 8. As evoluções aumentam dano e velocidade; Buu ganha regeneração e Krillin ganha críticos adicionais.
-- Sobrevive **20 minutos de tempo ativo**, depois derrota Freeza. O confronto final pode prolongar a partida além dos 20 minutos. Pausas e escolhas não contam para o relógio.
-- Vida a zero termina a partida. Ambos os resultados permitem reiniciar ou escolher outro guerreiro.
+- Computador: WASD/setas; Escape ou Ⅱ para pausar.
+- Android: toca e arrasta na arena para usar o joystick; Ⅱ para pausar. Retrato e paisagem são suportados.
+- Ataques automáticos apontam para os inimigos próximos. O movimento continua durante a preparação e execução das técnicas.
+- Recolhe cristais de XP e escolhe entre três melhorias ao subir de nível.
+- Sobrevive 20 minutos de tempo ativo; depois derrota Freeza. O confronto final pode prolongar a partida. A derrota ocorre quando a vida chega a zero.
+- Pausa, reinício e seleção de personagem mantêm-se disponíveis. Recordes e definições usam o mesmo `localStorage` anterior.
 
-## Personagens e progressão
+## Personagens, técnicas e transformações
 
-| Personagem | Técnicas implementadas                                                  | Progressão automática                                                                  |
-| ---------- | ----------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| Goku       | Ki Blasts, Kamehameha penetrante, Genki Dama em área                    | SSJ 5, SSJ2 10, SSJ3 15, God 20, Blue 25, Ultra Instinct 30                            |
-| Vegeta     | Galick Gun penetrante, Big Bang Attack em área, Final Flash largo       | SSJ 5, SSJ2 10, God 15, Blue 20, Ultra Ego 30                                          |
-| Kid Buu    | Braço elástico, rajada em leque, Planet Burst em área                   | Evoluções de técnicas nos níveis 5, 10, 15, 20, 25 e 30; sem transformações inventadas |
-| Krillin    | Kienzan penetrante, Taiyoken que abranda inimigos, Kienzan duplo/triplo | Evoluções de técnicas nos níveis 5, 10, 15, 20, 25 e 30; sem Super Saiyan              |
-| Gohan      | Masenko, Kamehameha, Special Beam Cannon estreito e penetrante          | SSJ 5, SSJ2 10, Ultimate 20, Beast 30                                                  |
+| Personagem | Técnicas                                   | Progressão automática                                                    |
+| ---------- | ------------------------------------------ | ------------------------------------------------------------------------ |
+| Goku       | Ki Blasts, Kamehameha, Genki Dama          | SSJ 5, SSJ2 10, SSJ3 15, God 20, Blue 25, Ultra Instinct 30              |
+| Vegeta     | Galick Gun, Big Bang Attack, Final Flash   | SSJ 5, SSJ2 10, God 15, Blue 20, Ultra Ego 30                            |
+| Kid Buu    | Braço elástico, Rajada de ki, Planet Burst | Evoluções de técnicas em 5/10/15/20/25/30; sem formas físicas inventadas |
+| Krillin    | Kienzan, Taiyoken, Kienzan duplo/triplo    | Evoluções de técnicas em 5/10/15/20/25/30; sem Super Saiyan              |
+| Gohan      | Masenko, Kamehameha, Special Beam Cannon   | SSJ 5, SSJ2 10, Ultimate 20, Beast 30                                    |
 
-As transformações alteram cabelo/aura e atributos, com explosão de partículas e breve efeito de câmara. Cada forma de Goku, Vegeta e Gohan tem uma folha PNG própria, com cabelo e cores distintos em quatro direções. Krillin e Buu mantêm o aspeto base e usam auras animadas nas evoluções das técnicas, sem inventar transformações físicas.
+A técnica secundária desbloqueia no nível 3 e a final no nível 8. Personagens, atributos base, melhorias, limiares de XP, marcos de formas, arena, dano e cadências base das técnicas mantêm os valores anteriores. Colisões com terreno, controlos e formato dos recordes foram preservados. O contacto dos inimigos agora inclui a antecipação pedida; knockback e separação também alteram deliberadamente a movimentação e o momento dos impactos. Estes tempos precisam de balanceamento prolongado em partidas completas.
 
-Namek tem arena de 3600 × 3600, câmara centrada no jogador, tiles pixel art, rochas, árvores de copa azul e lagos. As árvores reutilizam os obstáculos anteriores; os lagos são decoração atravessável para preservar exatamente as colisões e regras existentes. Ondas avançam a cada minuto: frequência, quantidade, resistência e dano dos inimigos aumentam. Saibamen, soldados de Freeza e cinco variantes da Força Ginyu (Guldo, Recoome, Burter, Jeice e Ginyu) têm atributos e cores próprios. Freeza surge aos 20 minutos; abaixo de 50% de vida entra na segunda fase, com mais velocidade e rajadas radiais mais densas e frequentes.
+## Animações e movimento
 
-Recorde de duração, maior número de eliminações e opções de partículas/câmara são guardados em `localStorage`. Se o armazenamento estiver indisponível, a partida continua normalmente. O recorde mede o tempo sobrevivido, não uma classificação de rapidez para derrotar o boss.
+`src/animation.js` contém uma máquina reutilizável com **idle, walk, run, attack, charge, cast, hurt, knockback, transform e death**. Os clips têm frames, duração, prioridade, direção e transições. Eventos repetidos com o mesmo token não reiniciam o clip; morte não pode ser interrompida por um ataque de prioridade inferior.
 
-## Testar
+- Marcha/corrida usam **distância realmente percorrida**, incluindo colisões. Empurrar uma parede não faz os pés continuarem a andar.
+- Aceleração vetorial alcança a velocidade existente em cerca de 100 ms; a travagem demora menos de 100 ms. Diagonais não aumentam a velocidade máxima.
+- Mudanças de direção preservam a fase do passo e usam histerese para evitar oscilações nos movimentos diagonais.
+- O ponto de apoio dos sprites normalizados é o pixel 84 da célula; a sombra usa o mesmo chão.
+- Tronco em ataque/carregamento e pernas em marcha são camadas separadas quando o ator se move. A mistura usa poses desenhadas, não rotações de um corpo parado.
+- Física e animação avançam em passos fixos de 1/60 s, com delta time e interpolação visual de posições. Pausa e perda de foco suspendem o combate.
 
-Requer Node.js 20 ou posterior, sem instalar pacotes:
+**Quatro direções** são suportadas. Não existem oito vistas desenhadas. Algumas vistas laterais em falta nos mestres foram espelhadas durante a normalização; isso está documentado nos scripts de packing. As formas usam os novos corpos animados com paletas de cabelo próprias e camadas adicionais nas silhuetas SSJ3/Beast. As técnicas de assinatura usam poses específicas; não foram desenhados à mão todos os cruzamentos de técnica × forma.
+
+## Inimigos
+
+Saibamen, soldados, Guldo, Recoome, Burter, Jeice, Ginyu e as duas fases visuais de Freeza têm folhas de movimento e combate próprias, com idle, passos, antecipação/ataque, reação e morte. Os perfis pesados aceleram mais lentamente e resistem mais ao knockback. Os rápidos têm resposta de direção mais rápida.
+
+A separação usa uma grelha espacial e impulsos limitados; não muda os obstáculos da arena. Os ataques de contacto têm wind-up antes de verificar o alcance e aplicar dano. Freeza também carrega os disparos antes de lançar as rajadas radiais; a segunda fase mantém as rajadas mais densas e frequentes. Cadáveres deixam de participar nas colisões e executam a sua sequência de queda antes de desaparecer.
+
+## Técnicas com fases reais
+
+`src/weapons.js` define preparação, carregamento, lançamento, impacto e recuperação para cada técnica. Cooldowns e valores de dano/área anteriores foram conservados; o dano deixa de acontecer antes da preparação.
+
+- **Kamehameha:** carga de mãos, extensão progressiva de feixe azul e recuperação.
+- **Galick Gun:** carga violeta mais curta e feixe próprio.
+- **Final Flash:** braços abertos, reunião das palmas e feixe dourado largo.
+- **Masenko:** mãos à testa e lançamento dourado.
+- **Kienzan:** palma elevada, disco desenhado em rotação e lançamento penetrante.
+- **Genki Dama:** braços acima da cabeça, esfera carregada, voo e explosão no destino.
+- **Big Bang Attack:** esfera azul lançada até ao alvo antes da explosão.
+- **Planet Burst:** carga com uma mão elevada, arremesso e explosão magenta.
+- **Special Beam Cannon:** carga focada e feixe helicoidal amarelo/violeta.
+- **Taiyoken:** preparação junto do rosto, flash em área e o abrandamento anterior.
+- Braço elástico e rajada de Buu também usam a linha temporal e poses de ataque.
+
+Feixes nascem nas âncoras das mãos e acompanham a posição do emissor. A frente animada do feixe determina quando os alvos são atingidos; um conjunto de alvos impede dano repetido no mesmo lançamento. Discos/projéteis usam colisão varrida para não atravessarem inimigos a FPS baixos. Esferas só aplicam dano de área quando chegam ao destino. Explosões têm expansão e dissipação. Impactos fortes produzem um hit stop limitado a 32 ms, reação, números de dano e shake moderado, respeitando a definição de câmara.
+
+Transformações têm pose de concentração, carga, flash e mudança visual a meio do clip, depois regressam ao combate. Os bónus de progressão mantêm os marcos anteriores. Auras dourada, God, Blue, Ultra Instinct, Ultra Ego e Beast têm silhuetas e frames diferentes, além de ritmos próprios.
+
+## Inspecionar e testar
+
+Com o servidor ativo:
+
+- `tools/animation-review.html`: estúdio com os dez estados dos cinco personagens, quatro direções, câmara lenta e apoio dos pés.
+- `tools/art-review.html`: galeria de formas.
+
+Os testes de lógica não precisam de instalar pacotes, apenas Node.js 20+:
 
 ```sh
 npm test
+for file in src/*.js tools/*.cjs; do node --check "$file" || exit 1; done
 ```
 
-Os 10 testes cobrem os PNG e as grelhas dos atlases, ficheiros distintos para as formas, orçamento de texturas e os marcos de todos os personagens, colisões, experiência, melhorias, ataques dos cinco guerreiros, dano/invulnerabilidade, chegada e fases de Freeza, vitória e limites de entidades. Para verificar a sintaxe de todos os módulos:
+Os testes cobrem prioridades/transições, marcha independente do FPS, travagem/colisões, separação, pooling, fases e dano sincronizado de todas as técnicas, transformações, contacto, boss e os PNG/atlas.
+
+Testes opcionais de navegador usam Playwright e um Chromium instalado. Com o servidor ativo:
 
 ```sh
-for file in src/*.js; do node --check "$file" || exit 1; done
+npm install --no-save --package-lock=false playwright
+CHROMIUM_PATH=/usr/bin/chromium node tools/browser-smoke.cjs
+CHROMIUM_PATH=/usr/bin/chromium node tools/animation-smoke.cjs
 ```
 
-Também foi executado um teste de integração em Chromium: menu, seleção, movimento, pausa, melhorias, transformação, boss, vitória/derrota, persistência e joystick num viewport móvel. O teste é reutilizável em `tools/browser-smoke.cjs`. Para o executar com o servidor local ativo, instala opcionalmente `npm install --no-save --package-lock=false playwright` e executa `CHROMIUM_PATH=/usr/bin/chromium node tools/browser-smoke.cjs` (ajusta o caminho do Chromium à tua máquina; `GAME_URL` permite mudar o endereço do servidor). Esta dependência é apenas para desenvolvimento. Os estados tardios foram acelerados por instrumentação, sem esperar 20 minutos reais. A opção de URL `?test` expõe `window.__game` para inspeção local; não altera as regras normais do jogo.
+`GAME_URL` permite outro endereço de servidor. O teste de animação verifica 960 amostras de poses de jogadores/inimigos, 14 linhas temporais de técnicas em movimento, transformação, duas fases de Freeza e um gesto tátil real em viewport Android através do protocolo do Chromium. O teste de fluxo verifica pausa, níveis, vitória/derrota e persistência. `?test` expõe `window.__game` para instrumentação local; não altera as regras normais.
 
-## Publicar no GitHub Pages
+## Assets e otimização
 
-1. Guarda estes ficheiros na branch a publicar e envia-os para o GitHub.
-2. No repositório, abre **Settings → Pages**.
-3. Em **Build and deployment**, escolhe **Deploy from a branch**.
-4. Seleciona a branch (por exemplo `main`) e a pasta **/ (root)**; guarda.
-5. Aguarda o deployment do GitHub Pages. O endereço é apresentado nessa página.
+- `assets/manifest.json`: as 23 folhas de base existentes.
+- `assets/animation-manifest.json`: 99 folhas adicionais de animação/assinaturas/auras, incluindo variantes de cabelo geradas na normalização.
+- `assets/source/`: todos os mestres PNG originais; não são descarregados pelo jogo normal.
+- `assets/packed/`: texturas normalizadas, com células RGBA de 96 × 96 e quatro colunas. Todas as texturas somam cerca de **14,4 MiB**, mas a execução modular carrega as formas conforme necessário.
+- `assets/animation-layouts.json`: recortes corrigidos para os mestres com espaçamento/linhas irregulares.
 
-Não é necessário build, npm install, domínio próprio ou configuração de servidor. Os caminhos relativos funcionam num site de projeto, como `/Dragon-Ball-Survivors/`. O ficheiro `.nojekyll` permite servir diretamente os ficheiros estáticos. A publicação não é feita automaticamente por este projeto.
+Os PNG de corpos têm transparência limpa e paletas quantizadas, com nearest-neighbor e sem filtros de blur no combate. As fontes de maior resolução são mantidas sem alterações. O packing é técnico: recorte, alinhamento, espelhamento lateral e composição das camadas de cabelo; não substitui poses de ação por geometria.
 
-## Estrutura e expansão
+Limites: 180 inimigos comuns (boss pode usar uma vaga adicional), 300 partículas, pools de 180 projéteis por grupo, 24 cadáveres, 30 números de dano, 12 explosões visuais e oito feixes desenhados. Hitboxes continuam a usar os valores de área reais; dimensões de efeitos muito grandes são limitadas apenas no desenho. A resolução continua limitada a 2×. Não é garantido 60 FPS em todos os Android.
 
-- `src/main.js`: ciclo de jogo com delta time, progressão, câmara e coordenação.
-- `src/characters.js`: atributos, técnicas e formas dos cinco guerreiros.
-- `src/transformations.js`: marcos, aspeto e bónus das evoluções.
-- `src/config.js`: arenas, tipos de inimigo, variantes, limites e melhorias.
-- `src/enemies.js`: ondas, aproximação, contacto, boss e recompensas.
-- `src/weapons.js`: projéteis, feixes, explosões e Taiyoken.
-- `src/collisions.js`: movimento, limites e obstáculos.
-- `src/effects.js` e `src/render.js`: partículas, sprites, profundidade e cenário.
-- `src/sprites.js`: carregamento/cache dos PNG, animações, auras e atlas.
-- `assets/manifest.json`: grelhas, frames, caminhos e metadados das 23 folhas.
-- `assets/source/`: PNG originais de maior resolução, conservados sem alterações.
-- `assets/packed/`: PNG normalizados para execução no Android.
-- `tools/art-review.html`: galeria animada de personagens, formas e quatro direções.
-- `src/input.js`, `src/ui.js` e `src/states.js`: controlos, ecrãs, estados e armazenamento.
-
-Para adicionar arenas de Dragon Ball, Z, GT ou Super, acrescenta definições a `arenas` e tipos a `enemyTypes`, e seleciona a nova arena em `main.js`. Comportamentos especiais ou arte nova exigem implementar os respetivos módulos: não basta anunciar um nome na configuração. Só Namek está disponível nesta versão.
-
-## Desempenho e limites atuais
-
-`requestAnimationFrame`, delta time limitado a 50 ms, resolução até 2×, desenho dos mosaicos visíveis e limites de 180 inimigos comuns, 180 projéteis por grupo, 300 partículas e 250 cristais. Freeza pode ocupar uma vaga adicional. Experiência excedente acumula num cristal existente. A opção de menos partículas reduz os efeitos das eliminações. Ao perder foco, o jogo pausa automaticamente.
-
-A meta é 60 FPS quando o dispositivo permite; não há garantia em todos os Android. O teste móvel foi simulado em Chromium, não executado num telemóvel físico. Ainda faltam áudio, balanceamento prolongado de partidas completas e arenas adicionais. A arte é original, gerada para este projeto com assistência de IA, e pode beneficiar de retoque manual pixel a pixel; não foi copiada de sprites comerciais. Técnicas e transformações são representações estilizadas, não animações fiéis de episódios. O projeto não inclui recursos descarregados de terceiros.
-
-## Reforma visual e otimização
-
-As regras do combate foram preservadas: os nove módulos de mecânicas (`main`, `enemies`, `weapons`, `collisions`, `characters`, `config`, `transformations`, `input` e `states`) mantêm os mesmos SHA-256 da versão anterior a esta reforma. A direção visual é inferida das posições numa `WeakMap` de renderização, sem acrescentar atributos às entidades do jogo. Ordenação por profundidade, sombras e cenários não alteram colisões ou dano.
-
-Existem **20 folhas de personagens (320 frames de origem)**, uma folha de inimigos com 36 frames (incluindo as duas fases visuais de Freeza), uma de efeitos com 16 frames e uma de terreno/objetos com 16 tiles. Cada personagem/forma tem quatro vistas (sul, oeste, este, norte), poses idle e três frames de caminhada. Idle alterna as poses 0/2 lentamente com respiração; caminhada percorre 1/2/3. As auras têm quatro frames próprios e recebem cor na cache, sem filtros caros por frame.
-
-Os PNG originais ocupam cerca de 31 MB, mas **não são descarregados durante o jogo normal**. As 23 texturas otimizadas totalizam cerca de **2,7 MB**; inicialmente só são carregadas as bases e recursos comuns. As formas do personagem escolhido são pré-carregadas no menu. Não é necessário instalar ferramentas nem executar packing para jogar ou publicar: os PNG otimizados já estão incluídos.
-
-O renderer usa `imageSmoothingEnabled = false`, posições arredondadas, tiles/entidades visíveis, auras com cores em cache e desenho de PNG pré-processados. Mantém a resolução máxima e os limites anteriores. Não há leitura de pixels das imagens de origem no ciclo normal de execução.
-
-Para inspecionar todas as formas, abre `tools/art-review.html` através do servidor local. Para repetir o teste visual automatizado, com Playwright opcional instalado e o servidor ativo:
+Os PNG prontos estão incluídos; não é necessário fazer build para jogar ou publicar. Para reconstruir texturas após editar mestres, usa as dependências opcionais e o servidor local:
 
 ```sh
-CHROMIUM_PATH=/usr/bin/chromium node tools/visual-smoke.cjs
+node tools/pack-assets.cjs
+node tools/pack-animation.cjs
+node tools/pack-signatures.cjs
+node tools/optimize-animation.cjs
+python3 tools/export-standalone.py Dragon-Ball-Survivors.html
 ```
 
-Este teste verificou 80 combinações únicas de personagem/forma/direção, frames de caminhada distintos, ausência de PNG em falta, estado do jogo imutável durante desenho e uma multidão de 180 inimigos num viewport tátil simulado. O teste de integração anterior também voltou a passar. Não substitui uma medição num Android físico.
+Os scripts respeitam `CHROMIUM_PATH` e `GAME_URL`. A exportação HTML inclui todas as texturas e todos os módulos numa distribuição offline maior.
 
-Para regenerar as texturas otimizadas a partir dos PNG originais (apenas desenvolvimento):
+## Publicar e descarregar
 
-```sh
-CHROMIUM_PATH=/usr/bin/chromium node tools/pack-assets.cjs
-```
+O repositório pode ser descarregado pelo botão **Code → Download ZIP**. Para GitHub Pages: **Settings → Pages → Deploy from a branch → main → / (root)**. Não há instalação, build ou serviços de aplicação. Todos os caminhos são relativos e `.nojekyll` está incluído. Ativar GitHub Pages é uma ação separada do envio dos ficheiros para o repositório.
 
-O packing usa Chromium/Canvas somente para recorte, normalização de grelha e escala com nearest-neighbor; não redesenha nem substitui a arte. O caminho `?raw-assets` destina-se a esse processo e carrega os mestres maiores. Os PNG finais são RGBA, com células de 96 × 96 e quatro colunas. Mais detalhes em `assets/README.md`.
+## Limitações concretas
 
-## Exportar uma versão HTML única
-
-Opcionalmente, `python3 tools/export-standalone.py` gera `../Dragon-Ball-Survivors.html`, com módulos e os 23 PNG otimizados embutidos. Este ficheiro não precisa de procurar imagens, fontes ou JavaScript na rede. A versão modular continua a ser a recomendada para desenvolvimento e GitHub Pages.
+A arte é original, criada para este projeto com assistência de IA, e ainda beneficia de revisão manual pixel a pixel, sobretudo nas transições de silhueta entre famílias de poses e nas camadas de cabelo das formas. Algumas vistas laterais são espelhadas; não há animação em oito direções. Não há blending esquelético ou IK: a composição usa os PNG desenhados e âncoras fixas. Foram testados Chromium desktop e viewport Android com toque simulado; não houve teste num telemóvel físico nem uma partida manual completa de 20 minutos. Os novos timings de contacto/knockback precisam de balanceamento prolongado. Áudio e arenas adicionais continuam fora desta revisão.

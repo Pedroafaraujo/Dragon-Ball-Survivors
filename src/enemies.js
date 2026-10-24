@@ -1,5 +1,9 @@
 import { enemyTypes, limits, ginyuMembers } from "./config.js";
 import { distance, move } from "./collisions.js";
+import { animator, animateMotion, facing, handAnchor } from "./animation.js";
+import { separation, impact } from "./motion.js";
+import { projectilePool, reapProjectiles } from "./pool.js";
+let enemySerial = 0;
 export function spawn(g, type) {
   if (g.enemies.length >= limits.enemies && type !== "freeza") return;
   const a = Math.random() * Math.PI * 2,
@@ -22,6 +26,12 @@ export function spawn(g, type) {
     phase: 1,
     attack: 2,
     hit: 0,
+    seed: ++enemySerial,
+    contact: null,
+    vx: 0,
+    vy: 0,
+    kx: 0,
+    ky: 0,
   });
 }
 export function updateEnemies(g, dt) {
@@ -54,22 +64,61 @@ export function updateEnemies(g, dt) {
     spawn(g, "freeza");
     g.notice("FREEZA · A ÚLTIMA BATALHA", 4);
   }
+  const repulsion = separation(g.enemies);
   for (const e of g.enemies) {
     if (e.hp <= 0) continue;
     e.hit = Math.max(0, e.hit - dt);
-    const d = distance(e, g.player) || 1;
-    const slow = g.stun > 0 ? 0.08 : 1;
+    const anim = animator(e);
+    anim.stride = 14 + e.r * 2.3;
+    const d = distance(e, g.player) || 1,
+      near = d < e.r + g.player.r + 14;
+    if (!e.contact && near) {
+      e.contact = { time: 0, hit: false };
+      anim.play("attack", {
+        direction: facing(g.player.x - e.x, g.player.y - e.y, anim.direction),
+        duration: e.r > 20 ? 0.62 : 0.46,
+        token: Symbol("contact"),
+      });
+    }
+    const slow = (g.stun > 0 ? 0.08 : 1) * (e.contact?.time < 0.2 ? 0.55 : 1);
+    const ax = ((g.player.x - e.x) / d) * e.speed * slow,
+      ay = ((g.player.y - e.y) / d) * e.speed * slow;
+    const response = e.r > 20 ? 7 : e.type === "saibaman" ? 16 : 11,
+      blend = 1 - Math.exp(-response * dt);
+    e.vx += (ax - e.vx) * blend;
+    e.vy += (ay - e.vy) * blend;
+    const force = repulsion.get(e) || { x: 0, y: 0 },
+      oldX = e.x,
+      oldY = e.y;
+    e.prevX = e.x;
+    e.prevY = e.y;
     move(
       e,
-      ((g.player.x - e.x) / d) * e.speed * dt * slow,
-      ((g.player.y - e.y) / d) * e.speed * dt * slow,
+      (e.vx + force.x + (e.kx || 0)) * dt,
+      (e.vy + force.y + (e.ky || 0)) * dt,
       g.arena,
       g.obstacles,
     );
-    if (d < e.r + g.player.r && g.player.invuln <= 0) {
-      g.player.hp -= e.damage;
-      g.player.invuln = 0.65;
-      g.effects.burst(g.player.x, g.player.y, "#ff6b78");
+    e.kx = (e.kx || 0) * Math.exp(-11 * dt);
+    e.ky = (e.ky || 0) * Math.exp(-11 * dt);
+    animateMotion(e, oldX, oldY, dt, e.speed * 1.4);
+    if (e.contact) {
+      const previous = e.contact.time;
+      e.contact.time += dt;
+      const windup = e.r > 20 ? 0.24 : 0.16;
+      if (previous < windup && e.contact.time >= windup && !e.contact.hit) {
+        e.contact.hit = true;
+        if (
+          distance(e, g.player) < e.r + g.player.r + 4 &&
+          g.player.invuln <= 0
+        ) {
+          g.player.hp -= e.damage;
+          g.player.invuln = 0.65;
+          impact(g, g.player, { x: e.x, y: e.y, damage: e.damage });
+          g.effects.burst(g.player.x, g.player.y, "#ff6b78", 7);
+        }
+      }
+      if (e.contact.time >= (e.r > 20 ? 0.62 : 0.46)) e.contact = null;
     }
     if (e.type === "freeza") {
       if (e.hp < e.maxHp / 2 && e.phase === 1) {
@@ -79,43 +128,78 @@ export function updateEnemies(g, dt) {
         g.effects.burst(e.x, e.y, "#ca73ef", 50);
       }
       e.attack -= dt;
-      if (e.attack <= 0) {
-        e.attack = e.phase === 2 ? 1.4 : 2.4;
-        const count = e.phase === 2 ? 16 : 10;
-        for (let i = 0; i < count; i++) {
-          const a = (i / count) * Math.PI * 2 + g.time;
-          g.hostile.push({
-            x: e.x,
-            y: e.y,
-            vx: Math.cos(a) * 190,
-            vy: Math.sin(a) * 190,
-            t: 5,
-            r: 7,
-            damage: 18,
+      if (e.attack <= 0 && !e.bossCast) {
+        e.bossCast = { time: 0, released: false };
+        anim.play("charge", {
+          direction: facing(g.player.x - e.x, g.player.y - e.y),
+          duration: 0.4,
+          priority: 5,
+          token: Symbol("boss-charge"),
+        });
+      }
+      if (e.bossCast) {
+        e.bossCast.time += dt;
+        if (e.bossCast.time >= 0.34 && !e.bossCast.released) {
+          e.bossCast.released = true;
+          const count = e.phase === 2 ? 16 : 10,
+            origin = handAnchor(e, anim.direction);
+          anim.play("cast", {
+            duration: 0.3,
+            priority: 5,
+            token: Symbol("boss-cast"),
           });
+          for (let i = 0; i < count; i++) {
+            const b = projectilePool(g, true).acquire();
+            if (!b) break;
+            const a = (i / count) * Math.PI * 2 + g.time;
+            Object.assign(b, {
+              x: origin.x,
+              y: origin.y,
+              prevX: origin.x,
+              prevY: origin.y,
+              vx: Math.cos(a) * 190,
+              vy: Math.sin(a) * 190,
+              t: 5,
+              r: 7,
+              damage: 18,
+            });
+            g.hostile.push(b);
+          }
+        }
+        if (e.bossCast.time >= 0.64) {
+          e.bossCast = null;
+          e.attack = e.phase === 2 ? 1.4 - 0.64 : 2.4 - 0.64;
         }
       }
     }
   }
   for (const b of g.hostile) {
+    b.prevX = b.x;
+    b.prevY = b.y;
     b.x += b.vx * dt;
     b.y += b.vy * dt;
     b.t -= dt;
     if (distance(b, g.player) < b.r + g.player.r && g.player.invuln <= 0) {
       g.player.hp -= b.damage;
       g.player.invuln = 0.6;
+      impact(g, g.player, { x: b.prevX, y: b.prevY, damage: b.damage });
       b.t = 0;
     }
   }
-  g.hostile = g.hostile.filter((b) => b.t > 0).slice(-180);
+  reapProjectiles(g, true);
 }
-export function hurt(g, e, damage) {
+export function hurt(g, e, damage, feedback = {}) {
   if (e.hp <= 0) return;
   const crit = Math.random() < g.player.crit;
   e.hp -= damage * (crit ? 2 : 1);
   e.hit = 0.12;
+  impact(g, e, { ...feedback, damage: damage * (crit ? 2 : 1) });
   if (e.hp <= 0) {
     g.kills++;
+    animator(e).play("death", { force: true, token: Symbol("death") });
+    const corpses = g.corpses || (g.corpses = []);
+    corpses.push({ ...e, life: 1.1 });
+    if (corpses.length > 24) corpses.shift();
     if (!g.save.reduced) g.effects.burst(e.x, e.y, e.color, 7);
     if (e.type === "freeza") {
       g.finish(true);

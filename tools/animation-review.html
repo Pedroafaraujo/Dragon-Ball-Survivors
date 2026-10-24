@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="pt">
+  <meta charset="UTF-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  /><title>Estúdio de animação — Dragon Ball Survivors</title
+  ><style>
+    body {
+      margin: 20px;
+      background: #0e2935;
+      color: #f9dc99;
+      font: 14px system-ui;
+    }
+    canvas {
+      background: #244b4a;
+      image-rendering: pixelated;
+      width: 100%;
+      max-width: 1440px;
+      display: block;
+    }
+    select,
+    button {
+      background: #163b49;
+      color: #fff0bc;
+      border: 1px solid #809e8b;
+      padding: 10px;
+      margin: 8px;
+    }
+    p {
+      color: #abcfc2;
+    }
+  </style>
+  <h1>Estúdio de animação</h1>
+  <p>
+    Poses desenhadas por estado. Os ciclos não dependem do relógio global de
+    renderização.
+  </p>
+  <label
+    >Direção<select id="direction">
+      <option value="south">Sul</option>
+      <option value="west">Oeste</option>
+      <option value="east">Este</option>
+      <option value="north">Norte</option>
+    </select></label
+  ><label
+    >Velocidade<select id="rate">
+      <option value="1">Normal</option>
+      <option value="0.35">Câmara lenta</option>
+      <option value="0">Parado</option>
+    </select></label
+  ><label><input type="checkbox" id="anchors" checked />Ver apoio dos pés</label
+  ><canvas width="1440" height="820"></canvas>
+  <p id="status">A carregar…</p>
+  <script type="module">
+    import { characters } from "../src/characters.js";
+    import { Animator, CLIPS } from "../src/animation.js";
+    import { prepareAnimation, ready, drawFighter } from "../src/sprites.js";
+    await ready;
+    await Promise.all(characters.map((c) => prepareAnimation(c.id, 0)));
+    document.querySelector("#status").textContent =
+      "Idle, walk, run, attack, charge, cast, hurt, knockback, transform e death · 4 direções. As vistas laterais em falta nos mestres foram espelhadas no packing.";
+    const canvas = document.querySelector("canvas"),
+      ctx = canvas.getContext("2d"),
+      names = Object.keys(CLIPS),
+      actors = characters.map(() => names.map(() => new Animator()));
+    let last = performance.now();
+    function frame(now) {
+      const dt =
+        Math.min(0.05, (now - last) / 1000) *
+        Number(document.querySelector("#rate").value);
+      last = now;
+      ctx.clearRect(0, 0, 1440, 820);
+      ctx.imageSmoothingEnabled = false;
+      const direction = document.querySelector("#direction").value;
+      names.forEach((n, i) => {
+        ctx.fillStyle = "#f9dc99";
+        ctx.font = "14px monospace";
+        ctx.textAlign = "center";
+        ctx.fillText(n, i * 144 + 72, 22);
+      });
+      characters.forEach((c, row) => {
+        ctx.fillStyle = "#d9edd8";
+        ctx.textAlign = "left";
+        ctx.fillText(c.name, 8, row * 155 + 50);
+        names.forEach((name, col) => {
+          const a = actors[row][col];
+          a.direction = direction;
+          if (["idle", "walk", "run"].includes(name)) {
+            a.action = null;
+            if (name === "idle") {
+              a.motionStep(0, 0, dt, 190);
+            } else {
+              a.motionStep((name === "run" ? 190 : 100) * dt, 0, dt, 190);
+              a.direction = direction;
+            }
+          } else if (
+            !a.action ||
+            a.action.direction !== direction ||
+            (name === "death" && a.action.elapsed > 1.15)
+          )
+            a.play(name, {
+              force: true,
+              direction,
+              duration: CLIPS[name].duration,
+              token: Symbol(name),
+            });
+          a.update(dt);
+          ctx.save();
+          ctx.translate(col * 144 + 72, row * 155 + 108);
+          if (document.querySelector("#anchors").checked) {
+            ctx.fillStyle = "#a6c9b160";
+            ctx.fillRect(-22, 18, 44, 1);
+          }
+          drawFighter(ctx, c, 0, now / 1000, direction, false, a);
+          ctx.restore();
+        });
+      });
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  </script>
+</html>

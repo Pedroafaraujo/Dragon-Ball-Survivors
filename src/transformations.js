@@ -1,3 +1,4 @@
+import { animator } from "./animation.js";
 export const thresholds = (c) =>
   c.forms.length === 5
     ? [5, 10, 20, 30]
@@ -27,13 +28,20 @@ export function transform(g) {
   const next = formIndex(g.character, p.level);
   if (next > p.form) {
     const gained = next - p.form;
+    const a = animator(p);
+    a.formFrom = p.form;
+    a.changedForm = false;
+    a.play("transform", {
+      force: true,
+      duration: 0.9,
+      token: Symbol("transform"),
+    });
     p.form = next;
     if (g.character.id === "buu") p.regen += gained * 0.7;
     if (g.character.id === "krillin")
       p.crit = Math.min(0.8, p.crit + gained * 0.035);
     p.hp = Math.min(p.maxHp, p.hp + 25);
-    g.effects.burst(p.x, p.y, appearance(g.character, next).aura, 45);
-    g.flash = 0.65;
+    g.effects.burst(p.x, p.y, appearance(g.character, next).aura, 8);
     g.notice(`${g.character.forms[next]} · PODER DESPERTADO`, 3);
   }
 }

@@ -1,6 +1,6 @@
 import { characters } from "./characters.js";
 import { arenas } from "./config.js";
-import { move, makeObstacles, distance } from "./collisions.js";
+import { makeObstacles, distance } from "./collisions.js";
 import { Effects } from "./effects.js";
 import { State, loadSave, persist, xpNeeded } from "./states.js";
 import { transform } from "./transformations.js";
@@ -9,6 +9,8 @@ import { attack } from "./weapons.js";
 import { draw } from "./render.js";
 import { UI } from "./ui.js";
 import { Input } from "./input.js";
+import { animator } from "./animation.js";
+import { playerMotion } from "./motion.js";
 export class Game {
   constructor() {
     this.canvas = document.getElementById("game");
@@ -38,6 +40,17 @@ export class Game {
   }
   reset() {
     this.enemies = [];
+    this.corpses = [];
+    this.casts = [];
+    this.orbs = [];
+    this.feedback = [];
+    this.hitStop = 0;
+    this.trauma = 0;
+    this.feedbackCooldown = 0;
+    this.pendingEnd = null;
+    this.bulletPool = null;
+    this.hostilePool = null;
+    this.accumulator = 0;
     this.gems = [];
     this.bullets = [];
     this.hostile = [];
@@ -78,6 +91,12 @@ export class Game {
       xp: 0,
       form: 0,
       invuln: 1,
+      vx: 0,
+      vy: 0,
+      kx: 0,
+      ky: 0,
+      prevX: 1800,
+      prevY: 1800,
     };
     this.state = State.PLAY;
     this.input.reset();
@@ -117,14 +136,59 @@ export class Game {
   }
   finish(win) {
     if (this.state !== State.PLAY) return;
-    this.state = win ? State.WIN : State.LOSE;
+    this.state = State.ENDING;
+    this.pendingEnd = { win, t: 0.8 };
+    if (!win)
+      animator(this.player).play("death", {
+        force: true,
+        token: Symbol("player-death"),
+      });
     this.save.best = Math.max(this.save.best, this.time);
     this.save.kills = Math.max(this.save.kills, this.kills);
     persist(this.save);
     this.input.reset();
-    this.ui.end(win);
+  }
+  tickVisuals(dt) {
+    this.trauma = Math.max(0, this.trauma - dt * 2);
+    this.feedbackCooldown = Math.max(0, this.feedbackCooldown - dt);
+    if (this.player) {
+      const a = animator(this.player);
+      a.update(dt);
+      if (
+        a.action?.state === "transform" &&
+        a.action.elapsed >= a.action.duration * 0.5 &&
+        !a.changedForm
+      ) {
+        a.changedForm = true;
+        this.flash = 0.45;
+        this.effects.burst(
+          this.player.x,
+          this.player.y,
+          "#d8faff",
+          this.save.reduced ? 10 : 32,
+        );
+      }
+    }
+    for (const e of this.enemies) if (e.hp > 0) animator(e).update(dt);
+    for (const e of this.corpses) {
+      e.life -= dt;
+      animator(e).update(dt);
+    }
+    this.corpses = this.corpses.filter((e) => e.life > 0);
+    for (const f of this.feedback) f.t -= dt;
+    this.feedback = this.feedback.filter((f) => f.t > 0);
   }
   update(dt) {
+    if (this.state === State.ENDING) {
+      this.tickVisuals(dt);
+      this.effects.update(dt);
+      this.pendingEnd.t -= dt;
+      if (this.pendingEnd.t <= 0) {
+        this.state = this.pendingEnd.win ? State.WIN : State.LOSE;
+        this.ui.end(this.pendingEnd.win);
+      }
+      return;
+    }
     if (this.state !== State.PLAY) return;
     const p = this.player;
     this.time += dt;
@@ -134,22 +198,18 @@ export class Game {
     p.invuln = Math.max(0, p.invuln - dt);
     p.hp = Math.min(p.maxHp, p.hp + p.regen * dt);
     const v = this.input.vector();
-    move(
-      p,
-      v.x * p.speed * (1 + p.form * 0.035) * dt,
-      v.y * p.speed * (1 + p.form * 0.035) * dt,
-      this.arena,
-      this.obstacles,
-    );
+    playerMotion(this, v, dt);
     updateEnemies(this, dt);
     if (p.hp <= 0) {
       p.hp = 0;
       this.finish(false);
+      this.tickVisuals(dt);
       this.ui.hud();
       return;
     }
     attack(this, dt);
     if (this.state !== State.PLAY) {
+      this.tickVisuals(dt);
       this.ui.hud();
       return;
     }
@@ -169,17 +229,35 @@ export class Game {
       }
     }
     this.gems = this.gems.filter((gem) => !gem.collected);
-    this.lines = this.lines.filter((l) => (l.t -= dt) > 0);
+
     this.rings = this.rings.filter((r) => (r.t -= dt) > 0);
     this.effects.update(dt);
+    this.tickVisuals(dt);
     this.checkLevel();
     this.ui.hud();
   }
   frame(now) {
-    const dt = Math.min((now - this.last) / 1000, 0.05);
+    const dt = Math.min(Math.max(0, (now - this.last) / 1000), 0.1);
     this.last = now;
-    this.update(dt);
-    draw(this);
+    if (this.hitStop > 0 && this.state === State.PLAY) {
+      this.hitStop = Math.max(0, this.hitStop - dt);
+      draw(this, 1);
+      requestAnimationFrame(this.frame);
+      return;
+    }
+    this.accumulator += dt;
+    const step = 1 / 60;
+    let ticks = 0;
+    while (this.accumulator >= step && ticks < 6) {
+      this.update(step);
+      this.accumulator -= step;
+      ticks++;
+      if (this.hitStop > 0) {
+        this.accumulator = 0;
+        break;
+      }
+    }
+    draw(this, this.state === State.PLAY ? this.accumulator / step : 1);
     requestAnimationFrame(this.frame);
   }
 }

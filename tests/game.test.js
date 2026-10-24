@@ -107,6 +107,8 @@ test("contact damage respects invulnerability", () => {
   g.enemies[0].x = 1800;
   g.enemies[0].y = 1800;
   updateEnemies(g, 0.01);
+  assert.equal(g.player.hp, 100); // Wind-up is visible before contact damage.
+  for (let i = 0; i < 16; i++) updateEnemies(g, 0.01);
   assert.equal(g.player.hp, 91);
   updateEnemies(g, 0.01);
   assert.equal(g.player.hp, 91);
@@ -122,6 +124,8 @@ test("boss arrives at 20 minutes, changes phase, fires and triggers victory", ()
   boss.attack = 0;
   updateEnemies(g, 0.01);
   assert.equal(boss.phase, 2);
+  assert.equal(g.hostile.length, 0); // Boss charge must precede launch.
+  for (let i = 0; i < 35; i++) updateEnemies(g, 0.01);
   assert.equal(g.hostile.length, 16);
   hurt(g, boss, 99999);
   assert.equal(g.won, true);

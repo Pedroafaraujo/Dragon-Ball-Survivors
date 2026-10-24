@@ -1,3 +1,4 @@
+import { enemyArt, ENEMY_ART, PACK_ROWS } from "./animation-assets.js";
 /** PNG presentation layer. It never changes a game entity or its statistics. */
 export const FORM_FILES = {
   goku: ["base", "ssj", "ssj2", "ssj3", "god", "blue", "ui"],
@@ -56,7 +57,11 @@ export function loadSheet(key, file, rows = 4, size = 66, trim = true) {
     const image = new Image();
     image.onload = () => {
       try {
-        if (!rawAssets) {
+        if (
+          !rawAssets ||
+          file.startsWith("animation/") ||
+          file === "effects/auras.png"
+        ) {
           if (image.width !== 384 || image.height !== rows * 96)
             throw new Error(`Dimensões inválidas: ${key}`);
           const sheet = { image, cell: 96, rows, file, frames: 4 * rows };
@@ -147,6 +152,7 @@ export function characterKey(id, form = 0) {
   return `${id}-${forms[Math.min(form, forms.length - 1)]}`;
 }
 export function prepareCharacter(id) {
+  prepareAnimation(id, 0).catch(() => {});
   return Promise.all(
     FORM_FILES[id].map((suffix) =>
       loadSheet(
@@ -180,6 +186,48 @@ export function drawCell(ctx, key, col, row, x, y, width = 96, height = width) {
   );
   return true;
 }
+export function prepareAnimation(id, form = 0) {
+  const suffix = FORM_FILES[id][Math.min(form, FORM_FILES[id].length - 1)];
+  return Promise.all(
+    Object.entries(PACK_ROWS).map(([kind, rows]) => {
+      const key =
+        suffix === "base" ? `${id}-${kind}` : `${id}-${suffix}-${kind}`;
+      return loadSheet(key, `animation/${key}.png`, rows, 66);
+    }),
+  );
+}
+export function prepareEnemy(id) {
+  return Promise.all(
+    ["motion", "combat"].map((kind) =>
+      loadSheet(
+        `enemy-${id}-${kind}`,
+        `animation/enemy-${id}-${kind}.png`,
+        kind === "motion" ? 8 : 12,
+        62,
+      ),
+    ),
+  );
+}
+function poseSheet(id, form, sample) {
+  if (sample.pack === "base")
+    return {
+      key: characterKey(id, form),
+      row: DIRECTIONS.indexOf(sample.direction),
+      frame: sample.frame,
+    };
+  const suffix = FORM_FILES[id][Math.min(form, FORM_FILES[id].length - 1)],
+    key =
+      suffix === "base"
+        ? `${id}-${sample.pack}`
+        : `${id}-${suffix}-${sample.pack}`;
+  if (!cache.has(key) && !loading.has(key))
+    prepareAnimation(id, form).catch(() => {});
+  return {
+    key: cache.has(key) ? key : `${id}-${sample.pack}`,
+    row: sample.group + DIRECTIONS.indexOf(sample.direction),
+    frame: sample.frame,
+  };
+}
 export function drawFighter(
   ctx,
   c,
@@ -187,28 +235,103 @@ export function drawFighter(
   time,
   direction = "south",
   moving = false,
+  anim = null,
 ) {
-  const key = characterKey(c.id, form);
-  if (!cache.has(key) && !loading.has(key))
-    loadSheet(key, `sprites/${key}.png`, 4, characterSizes[c.id]).catch(
-      () => {},
-    );
-  const frame = moving
-    ? 1 + (Math.floor(time * 9) % 3)
-    : Math.floor(time * 1.6) % 2 === 0
-      ? 0
-      : 2;
-  const bob = moving ? 0 : Math.sin(time * 2.7) > 0.65 ? -1 : 0;
+  const sampled = anim
+    ? anim.sample()
+    : {
+        state: moving ? "run" : "idle",
+        pack: "motion",
+        group: moving ? 4 : 0,
+        frame: Math.floor(time * (moving ? 9 : 3)) % 4,
+        direction,
+      };
+  const active = poseSheet(c.id, form, sampled);
   ctx.imageSmoothingEnabled = false;
-  drawCell(
-    ctx,
-    cache.has(key) ? key : `${c.id}-base`,
-    frame,
-    Math.max(0, DIRECTIONS.indexOf(direction)),
-    -48,
-    -66 + bob,
-  );
+  if (
+    anim?.action &&
+    anim.motion !== "idle" &&
+    ["attack", "charge", "cast", "transform"].includes(sampled.state)
+  ) {
+    const legs = poseSheet(c.id, form, anim.sample(false));
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(-48, -6, 96, 36);
+    ctx.clip();
+    drawCell(ctx, legs.key, legs.frame, legs.row, -48, -66);
+    ctx.restore();
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(-48, -66, 96, 60);
+    ctx.clip();
+    drawCell(ctx, active.key, active.frame, active.row, -48, -66);
+    ctx.restore();
+  } else drawCell(ctx, active.key, active.frame, active.row, -48, -66);
 }
+export function drawEnemySprite(ctx, e, size = 96) {
+  const id = enemyArt(e),
+    a = e.anim,
+    sample = a
+      ? a.sample()
+      : {
+          state: "idle",
+          frame: 0,
+          group: 0,
+          direction: "south",
+          pack: "motion",
+        };
+  let kind = "motion",
+    row = 0,
+    frame = sample.frame;
+  if (["idle", "walk", "run"].includes(sample.state)) {
+    row =
+      (sample.state === "idle" ? 0 : 4) + DIRECTIONS.indexOf(sample.direction);
+    frame =
+      sample.state === "idle" ? sample.frame : Math.floor(sample.phase * 4) % 4;
+  } else {
+    kind = "combat";
+    const group =
+      sample.state === "death"
+        ? 8
+        : ["hurt", "knockback"].includes(sample.state)
+          ? 4
+          : 0;
+    row = group + DIRECTIONS.indexOf(sample.direction);
+  }
+  const key = `enemy-${id}-${kind}`;
+  if (!cache.has(key) && !loading.has(key)) prepareEnemy(id).catch(() => {});
+  const y = e.r - size + size * 0.125;
+  if (
+    a?.action &&
+    a.speed > 2 &&
+    ["attack", "charge", "cast"].includes(sample.state)
+  ) {
+    const legs = a.sample(false),
+      legRow = 4 + DIRECTIONS.indexOf(legs.direction);
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(-size / 2, y + size * 0.625, size, size * 0.375);
+    ctx.clip();
+    drawCell(
+      ctx,
+      `enemy-${id}-motion`,
+      Math.floor(legs.phase * 4) % 4,
+      legRow,
+      -size / 2,
+      y,
+      size,
+      size,
+    );
+    ctx.restore();
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(-size / 2, y, size, size * 0.625);
+    ctx.clip();
+    drawCell(ctx, key, frame, row, -size / 2, y, size, size);
+    ctx.restore();
+  } else drawCell(ctx, key, frame, row, -size / 2, y, size, size);
+}
+
 const tints = new Map();
 export function tintedEffect(color) {
   if (tints.has(color)) return tints.get(color);
@@ -249,6 +372,50 @@ export function effect(
     Math.round(height),
   );
 }
+export function auraEffect(ctx, form, frame, x, y, width, height) {
+  const sheet = cache.get("auras");
+  if (!sheet) return false;
+  const row =
+    form === "God"
+      ? 1
+      : form === "Blue"
+        ? 2
+        : form === "Ultra Instinct"
+          ? 3
+          : form === "Ultra Ego"
+            ? 4
+            : form === "Beast"
+              ? 5
+              : 0;
+  ctx.drawImage(
+    sheet.image,
+    frame * 96,
+    row * 96,
+    96,
+    96,
+    Math.round(x - width / 2),
+    Math.round(y - height / 2),
+    width,
+    height,
+  );
+  return true;
+}
+export function beamEffect(ctx, helix, frame, x, y, w, h) {
+  const sheet = cache.get("auras");
+  if (!sheet) return false;
+  ctx.drawImage(
+    sheet.image,
+    frame * 96,
+    (helix ? 7 : 6) * 96,
+    96,
+    96,
+    Math.round(x - w / 2),
+    Math.round(y - h / 2),
+    w,
+    h,
+  );
+  return true;
+}
 export const ready = Promise.all([
   ...Object.keys(FORM_FILES).map((id) =>
     loadSheet(`${id}-base`, `sprites/${id}-base.png`, 4, characterSizes[id]),
@@ -256,9 +423,13 @@ export const ready = Promise.all([
   loadSheet("namek", "tiles/namek.png", 4, 80, false),
   loadSheet("effects", "effects/ki.png", 4, 80, false),
   loadSheet("enemies", "sprites/enemies.png", 9, 62),
+  ...Object.keys(FORM_FILES).map((id) => prepareAnimation(id, 0)),
+  prepareEnemy("saibaman"),
+  loadSheet("auras", "effects/auras.png", 8, 80, false),
 ])
   .then(() => {
     assetStatus.ready = true;
+    for (const id of ENEMY_ART) prepareEnemy(id).catch(() => {});
     document.dispatchEvent(new CustomEvent("assets-ready"));
   })
   .catch((error) => {
