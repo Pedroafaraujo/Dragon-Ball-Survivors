@@ -168,6 +168,7 @@ for actor,forms in FORMS.items():
         sheet.save(path,optimize=True);frame_data[key]=metadata
 
 layouts=json.loads((ROOT/'assets/animation-layouts.json').read_text())
+curation=json.loads((ROOT/'assets/pose-curation.json').read_text())
 for name,layout in layouts.items():
     source=extract(name,layout['rows']);kind=name.split('-')[-1];enemy=name.startswith('enemy-');id=name.split('-')[1] if enemy else name.split('-')[0]
     rows=8 if kind=='motion' else 12;entries=[]
@@ -184,12 +185,16 @@ for name,layout in layouts.items():
             tiles[16+col]=normalized([{'image':body}],HEIGHTS[id] if id=='buu' else 62)[0]
         extraction_report[name]['forwardGait']='existing complete front walk: left,passing,right,passing'
 
-    if name in ['krillin-combat','gohan-combat']:
-        # The original east row turns its back during extension. Mirror the
-        # complete west poses, never paste an arm/head onto the opposite body.
-        for group in [0,4,8]:
-            for col in range(4):tiles[(group+2)*4+col]=ImageOps.mirror(tiles[(group+1)*4+col])
-        extraction_report[name]['eastPoseCorrection']='complete west rows mirrored; discarded back-facing east cells'
+    if not enemy and kind=='combat':
+        originals=[tile.copy() for tile in tiles]
+        patches=curation['combat'][id]['cells']
+        for patch in patches:
+            tile=originals[patch['fromRow']*4+patch['fromFrame']]
+            tiles[patch['row']*4+patch['frame']]=ImageOps.mirror(tile) if patch['mirror'] else tile.copy()
+        # Opposite rows come from the reviewed west cells, not unreviewed rows.
+        for west,east in curation['oppositeRows']:
+            for col in range(4):tiles[east*4+col]=ImageOps.mirror(tiles[west*4+col])
+        extraction_report[name]['poseCuration']={'file':'assets/pose-curation.json','cells':patches,'oppositeRows':curation['oppositeRows']}
     for suffix in ['base'] if enemy else FORMS[id]:
         key=name if suffix=='base' else f'{id}-{suffix}-{kind}'
         frames=[full_variant(t,id,suffix,(i//4)%4,i%4,kind,i//4) for i,t in enumerate(tiles)]
@@ -217,6 +222,9 @@ for id,source,mapping_rows in specs:
         for col in range(4):tiles[8+col]=ImageOps.mirror(tiles[4+col])
     if id=='buu':
         for col in range(4):tiles[8+col]=ImageOps.mirror(tiles[4+col])
+    for col in curation['signature'].get(id,{}).get('mirrorWestFrames',[]):
+        tiles[4+col]=ImageOps.mirror(tiles[4+col])
+    for col in range(4):tiles[8+col]=ImageOps.mirror(tiles[4+col])
     extraction_report[source].setdefault('signatureCorrections',[]).append(id+': full-body directional release and guard recovery')
     for suffix in FORMS[id]:
         key=f'{id}-signature' if suffix=='base' else f'{id}-{suffix}-signature'
@@ -234,7 +242,7 @@ for col in range(4):
 aura.save(aura_path,optimize=True)
 extraction_report['beast-aura']={'correction':'removed disconnected purple tails from the preceding row; retained the full main pink/white aura in four cells'}
 # Preserve effect manifest entries; combat FX has its own local drawing source.
-old=json.loads((ROOT/'assets/animation-manifest.json').read_text());manifest += [s for s in old['sheets'] if s['key'] in ['auras','combat-fx']]
+old=json.loads((ROOT/'assets/animation-manifest.json').read_text());manifest += [s for s in old['sheets'] if s['key'] in ['auras','combat-fx'] or s.get('artStatus','').startswith('authored-moving-') or s.get('artStatus') in ['authored-form-cast','authored-form-signature']]
 (ROOT/'assets/animation-manifest.json').write_text(json.dumps({'version':2,'sheets':manifest},indent=2)+'\n')
 (ROOT/'src/frame-data.js').write_text('// Generated from individually repaired complete sprites. Pixel coordinates in 96px cells.\nexport const FRAME_DATA = '+json.dumps(frame_data,separators=(',',':'))+';\nexport const ART_STATUS = '+json.dumps({s['key']:s.get('artStatus','effect') for s in manifest},separators=(',',':'))+';\n')
 (ROOT/'assets/atlas-repair-report.json').write_text(json.dumps({'sources':extraction_report,'animationSheets':98,'staticFormSheets':20,'frames':sum(len(v) for v in frame_data.values())},indent=2)+'\n')

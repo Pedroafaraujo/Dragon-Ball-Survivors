@@ -105,7 +105,7 @@ CHROMIUM_PATH=/usr/bin/chromium node tools/combat-sequence.cjs
 ## Assets e otimização
 
 - `assets/manifest.json`: as 23 folhas de base existentes.
-- `assets/animation-manifest.json`: 100 folhas adicionais de animação/assinaturas/auras, com corpos completos por forma e fallbacks explicitamente identificados.
+- `assets/animation-manifest.json`: 162 folhas adicionais de animação/assinaturas/auras, com corpos completos por forma e fallbacks explicitamente identificados.
 - `assets/source/`: todos os mestres PNG originais; não são descarregados pelo jogo normal.
 - `assets/packed/`: texturas normalizadas, com células RGBA de 96 × 96 e quatro colunas. A execução modular carrega as formas conforme necessário; um teste mantém o total abaixo de 16 MiB.
 - `assets/animation-layouts.json`: recortes corrigidos para os mestres com espaçamento/linhas irregulares.
@@ -119,6 +119,7 @@ Os PNG prontos estão incluídos; não é necessário fazer build para jogar ou 
 ```sh
 python3 -m pip install -r tools/requirements-assets.txt
 python3 tools/repair-atlases.py
+python3 tools/pack-character-actions.py
 python3 tools/draw-combat-fx.py
 python3 tools/make-repair-previews.py
 python3 tools/export-standalone.py Dragon-Ball-Survivors.html
@@ -130,8 +131,14 @@ Os testes de navegador respeitam `CHROMIUM_PATH` e `GAME_URL`. Os antigos pack-a
 
 O repositório pode ser descarregado pelo botão **Code → Download ZIP**. Para GitHub Pages: **Settings → Pages → Deploy from a branch → main → / (root)**. Não há instalação, build ou serviços de aplicação. Todos os caminhos são relativos e `.nojekyll` está incluído. Ativar GitHub Pages é uma ação separada do envio dos ficheiros para o repositório.
 
-## Limitações concretas
+## Animação de corpo completo — atualização
 
-A correção reutiliza a arte original existente, sem chamadas a APIs. Não foram desenhadas novas poses para todas as transformações: 45 folhas de ação/reação/assinatura usam a guarda completa da forma; 15 folhas de locomoção transformada reutilizam os passos completos existentes. Não se anuncia corrida ou ataque exclusivo onde não existe arte adequada. Buu, Burter e Jeice usam os passos frontais completos existentes onde o mestre não tinha corrida frontal. Algumas vistas laterais são espelhadas; não há oito direções.
+Esta revisão acrescenta 62 spritesheets locais com 992 novos frames de corpo completo: corrida com lançamento nas cinco personagens e 15 formas, carregamentos em movimento nas formas base, quatro poses próprias de combate por transformação e sequências de Genki Dama, Final Flash e Masenko por forma. Não sobrepõe cabelo, troncos ou pernas. Os frames seguem a distância realmente percorrida e a recuperação devolve a fase existente da passada.
 
-Há 33 testes automáticos, incluindo a integridade dos 3.600 frames de animação e 320 frames das formas completas. A validação visual e capturas estão em [docs/animation-validation.md](docs/animation-validation.md), e as causas em [docs/animation-diagnosis.md](docs/animation-diagnosis.md). Foram testados Chromium desktop e viewport Android com toque simulado; não houve teste num telemóvel físico nem partida manual completa de 20 minutos. A qualidade das poses originais ainda beneficia de revisão artística manual.
+Diagnóstico, ficheiros alterados, validação e limites concretos: [docs/whole-body-animation.md](docs/whole-body-animation.md). Pré-visualização dos [atlas em movimento](docs/previews/moving-atlases.png), [assinaturas](docs/previews/signature-atlases.png) e [vídeo do combate real](docs/previews/moving-combat.webm).
+
+Há 43 testes automáticos; a auditoria inclui 4.912 células de corpos entre arte anterior e nova. As verificações de navegador abrangem as cinco personagens, quatro direções, técnicas e transformações, inimigos, Freeza e viewport Android com gesto tátil. Não houve teste em telemóvel físico nem uma partida manual completa de 20 minutos.
+
+Ainda existem fallbacks: reações de dano/morte das formas transformadas usam a guarda completa; carregamento em movimento destas formas usa pose completa parada; deslocamentos perpendiculares à mira também. Special Beam Cannon partilha a família de preparação à testa e não possui uma pose exclusiva de dois dedos. Há quatro direções e algumas vistas espelhadas, não oito. A locomoção anterior e os efeitos de combate continuam sujeitos à qualidade dos seus mestres originais.
+
+Os novos mestres foram criados com a ferramenta de geração de imagens e revistos/normalizados localmente; todos os PNG estão incluídos. O jogo e a reconstrução dos atlas não utilizam APIs, bibliotecas pagas ou serviços externos.

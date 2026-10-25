@@ -12113,6 +12113,3726 @@
         "ki-blue",
         "ki-pink"
       ]
+    },
+    {
+      "key": "buu-moving-cast",
+      "file": "moving/buu-cast.png",
+      "runtime": "packed/moving/buu-cast.png",
+      "source": "source/moving/buu-cast.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-moving-cast"
+    },
+    {
+      "key": "buu-moving-charge",
+      "file": "moving/buu-charge.png",
+      "runtime": "packed/moving/buu-charge.png",
+      "source": "source/moving/buu-charge.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-moving-charge"
+    },
+    {
+      "key": "buu-moving-overhead",
+      "file": "moving/buu-overhead.png",
+      "runtime": "packed/moving/buu-overhead.png",
+      "source": "source/moving/buu-overhead.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-moving-overhead"
+    },
+    {
+      "key": "gohan-beast-moving-cast",
+      "file": "moving/gohan-beast-cast.png",
+      "runtime": "packed/moving/gohan-beast-cast.png",
+      "source": "source/moving/gohan-beast-cast.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-moving-cast"
+    },
+    {
+      "key": "gohan-moving-cast",
+      "file": "moving/gohan-cast.png",
+      "runtime": "packed/moving/gohan-cast.png",
+      "source": "source/moving/gohan-cast.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-moving-cast"
+    },
+    {
+      "key": "gohan-moving-charge",
+      "file": "moving/gohan-charge.png",
+      "runtime": "packed/moving/gohan-charge.png",
+      "source": "source/moving/gohan-charge.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-moving-charge"
+    },
+    {
+      "key": "gohan-moving-forehead",
+      "file": "moving/gohan-forehead.png",
+      "runtime": "packed/moving/gohan-forehead.png",
+      "source": "source/moving/gohan-forehead.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-moving-forehead"
+    },
+    {
+      "key": "gohan-ssj-moving-cast",
+      "file": "moving/gohan-ssj-cast.png",
+      "runtime": "packed/moving/gohan-ssj-cast.png",
+      "source": "source/moving/gohan-ssj-cast.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-moving-cast"
+    },
+    {
+      "key": "gohan-ssj2-moving-cast",
+      "file": "moving/gohan-ssj2-cast.png",
+      "runtime": "packed/moving/gohan-ssj2-cast.png",
+      "source": "source/moving/gohan-ssj2-cast.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-moving-cast"
+    },
+    {
+      "key": "gohan-ultimate-moving-cast",
+      "file": "moving/gohan-ultimate-cast.png",
+      "runtime": "packed/moving/gohan-ultimate-cast.png",
+      "source": "source/moving/gohan-ultimate-cast.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-moving-cast"
+    },
+    {
+      "key": "goku-blue-moving-cast",
+      "file": "moving/goku-blue-cast.png",
+      "runtime": "packed/moving/goku-blue-cast.png",
+      "source": "source/moving/goku-blue-cast.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-moving-cast"
+    },
+    {
+      "key": "goku-moving-cast",
+      "file": "moving/goku-cast.png",
+      "runtime": "packed/moving/goku-cast.png",
+      "source": "source/moving/goku-cast.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-moving-cast"
+    },
+    {
+      "key": "goku-moving-charge",
+      "file": "moving/goku-charge.png",
+      "runtime": "packed/moving/goku-charge.png",
+      "source": "source/moving/goku-charge.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-moving-charge"
+    },
+    {
+      "key": "goku-god-moving-cast",
+      "file": "moving/goku-god-cast.png",
+      "runtime": "packed/moving/goku-god-cast.png",
+      "source": "source/moving/goku-god-cast.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-moving-cast"
+    },
+    {
+      "key": "goku-moving-overhead",
+      "file": "moving/goku-overhead.png",
+      "runtime": "packed/moving/goku-overhead.png",
+      "source": "source/moving/goku-overhead.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-moving-overhead"
+    },
+    {
+      "key": "goku-ssj-moving-cast",
+      "file": "moving/goku-ssj-cast.png",
+      "runtime": "packed/moving/goku-ssj-cast.png",
+      "source": "source/moving/goku-ssj-cast.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-moving-cast"
+    },
+    {
+      "key": "goku-ssj2-moving-cast",
+      "file": "moving/goku-ssj2-cast.png",
+      "runtime": "packed/moving/goku-ssj2-cast.png",
+      "source": "source/moving/goku-ssj2-cast.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-moving-cast"
+    },
+    {
+      "key": "goku-ssj3-moving-cast",
+      "file": "moving/goku-ssj3-cast.png",
+      "runtime": "packed/moving/goku-ssj3-cast.png",
+      "source": "source/moving/goku-ssj3-cast.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-moving-cast"
+    },
+    {
+      "key": "goku-ui-moving-cast",
+      "file": "moving/goku-ui-cast.png",
+      "runtime": "packed/moving/goku-ui-cast.png",
+      "source": "source/moving/goku-ui-cast.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-moving-cast"
+    },
+    {
+      "key": "krillin-moving-cast",
+      "file": "moving/krillin-cast.png",
+      "runtime": "packed/moving/krillin-cast.png",
+      "source": "source/moving/krillin-cast.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-moving-cast"
+    },
+    {
+      "key": "krillin-moving-forehead",
+      "file": "moving/krillin-forehead.png",
+      "runtime": "packed/moving/krillin-forehead.png",
+      "source": "source/moving/krillin-forehead.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-moving-forehead"
+    },
+    {
+      "key": "krillin-moving-overhead",
+      "file": "moving/krillin-overhead.png",
+      "runtime": "packed/moving/krillin-overhead.png",
+      "source": "source/moving/krillin-overhead.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-moving-overhead"
+    },
+    {
+      "key": "vegeta-blue-moving-cast",
+      "file": "moving/vegeta-blue-cast.png",
+      "runtime": "packed/moving/vegeta-blue-cast.png",
+      "source": "source/moving/vegeta-blue-cast.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-moving-cast"
+    },
+    {
+      "key": "vegeta-moving-cast",
+      "file": "moving/vegeta-cast.png",
+      "runtime": "packed/moving/vegeta-cast.png",
+      "source": "source/moving/vegeta-cast.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-moving-cast"
+    },
+    {
+      "key": "vegeta-moving-charge",
+      "file": "moving/vegeta-charge.png",
+      "runtime": "packed/moving/vegeta-charge.png",
+      "source": "source/moving/vegeta-charge.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-moving-charge"
+    },
+    {
+      "key": "vegeta-god-moving-cast",
+      "file": "moving/vegeta-god-cast.png",
+      "runtime": "packed/moving/vegeta-god-cast.png",
+      "source": "source/moving/vegeta-god-cast.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-moving-cast"
+    },
+    {
+      "key": "vegeta-ssj-moving-cast",
+      "file": "moving/vegeta-ssj-cast.png",
+      "runtime": "packed/moving/vegeta-ssj-cast.png",
+      "source": "source/moving/vegeta-ssj-cast.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-moving-cast"
+    },
+    {
+      "key": "vegeta-ssj2-moving-cast",
+      "file": "moving/vegeta-ssj2-cast.png",
+      "runtime": "packed/moving/vegeta-ssj2-cast.png",
+      "source": "source/moving/vegeta-ssj2-cast.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-moving-cast"
+    },
+    {
+      "key": "vegeta-ue-moving-cast",
+      "file": "moving/vegeta-ue-cast.png",
+      "runtime": "packed/moving/vegeta-ue-cast.png",
+      "source": "source/moving/vegeta-ue-cast.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-moving-cast"
+    },
+    {
+      "key": "gohan-beast-cast",
+      "file": "form-casts/gohan-beast.png",
+      "runtime": "packed/form-casts/gohan-beast.png",
+      "source": "source/form-casts/gohan-beast.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-cast"
+    },
+    {
+      "key": "gohan-ssj-cast",
+      "file": "form-casts/gohan-ssj.png",
+      "runtime": "packed/form-casts/gohan-ssj.png",
+      "source": "source/form-casts/gohan-ssj.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-cast"
+    },
+    {
+      "key": "gohan-ssj2-cast",
+      "file": "form-casts/gohan-ssj2.png",
+      "runtime": "packed/form-casts/gohan-ssj2.png",
+      "source": "source/form-casts/gohan-ssj2.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-cast"
+    },
+    {
+      "key": "gohan-ultimate-cast",
+      "file": "form-casts/gohan-ultimate.png",
+      "runtime": "packed/form-casts/gohan-ultimate.png",
+      "source": "source/form-casts/gohan-ultimate.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-cast"
+    },
+    {
+      "key": "goku-blue-cast",
+      "file": "form-casts/goku-blue.png",
+      "runtime": "packed/form-casts/goku-blue.png",
+      "source": "source/form-casts/goku-blue.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-cast"
+    },
+    {
+      "key": "goku-god-cast",
+      "file": "form-casts/goku-god.png",
+      "runtime": "packed/form-casts/goku-god.png",
+      "source": "source/form-casts/goku-god.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-cast"
+    },
+    {
+      "key": "goku-ssj-cast",
+      "file": "form-casts/goku-ssj.png",
+      "runtime": "packed/form-casts/goku-ssj.png",
+      "source": "source/form-casts/goku-ssj.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-cast"
+    },
+    {
+      "key": "goku-ssj2-cast",
+      "file": "form-casts/goku-ssj2.png",
+      "runtime": "packed/form-casts/goku-ssj2.png",
+      "source": "source/form-casts/goku-ssj2.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-cast"
+    },
+    {
+      "key": "goku-ssj3-cast",
+      "file": "form-casts/goku-ssj3.png",
+      "runtime": "packed/form-casts/goku-ssj3.png",
+      "source": "source/form-casts/goku-ssj3.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-cast"
+    },
+    {
+      "key": "goku-ui-cast",
+      "file": "form-casts/goku-ui.png",
+      "runtime": "packed/form-casts/goku-ui.png",
+      "source": "source/form-casts/goku-ui.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-cast"
+    },
+    {
+      "key": "vegeta-blue-cast",
+      "file": "form-casts/vegeta-blue.png",
+      "runtime": "packed/form-casts/vegeta-blue.png",
+      "source": "source/form-casts/vegeta-blue.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-cast"
+    },
+    {
+      "key": "vegeta-god-cast",
+      "file": "form-casts/vegeta-god.png",
+      "runtime": "packed/form-casts/vegeta-god.png",
+      "source": "source/form-casts/vegeta-god.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-cast"
+    },
+    {
+      "key": "vegeta-ssj-cast",
+      "file": "form-casts/vegeta-ssj.png",
+      "runtime": "packed/form-casts/vegeta-ssj.png",
+      "source": "source/form-casts/vegeta-ssj.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-cast"
+    },
+    {
+      "key": "vegeta-ssj2-cast",
+      "file": "form-casts/vegeta-ssj2.png",
+      "runtime": "packed/form-casts/vegeta-ssj2.png",
+      "source": "source/form-casts/vegeta-ssj2.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-cast"
+    },
+    {
+      "key": "vegeta-ue-cast",
+      "file": "form-casts/vegeta-ue.png",
+      "runtime": "packed/form-casts/vegeta-ue.png",
+      "source": "source/form-casts/vegeta-ue.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-cast"
+    },
+    {
+      "key": "gohan-base-signature-cast",
+      "file": "form-signatures/gohan-base.png",
+      "runtime": "packed/form-signatures/gohan-base.png",
+      "source": "source/form-signatures/gohan-base.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-signature"
+    },
+    {
+      "key": "gohan-beast-signature-cast",
+      "file": "form-signatures/gohan-beast.png",
+      "runtime": "packed/form-signatures/gohan-beast.png",
+      "source": "source/form-signatures/gohan-beast.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-signature"
+    },
+    {
+      "key": "gohan-ssj-signature-cast",
+      "file": "form-signatures/gohan-ssj.png",
+      "runtime": "packed/form-signatures/gohan-ssj.png",
+      "source": "source/form-signatures/gohan-ssj.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-signature"
+    },
+    {
+      "key": "gohan-ssj2-signature-cast",
+      "file": "form-signatures/gohan-ssj2.png",
+      "runtime": "packed/form-signatures/gohan-ssj2.png",
+      "source": "source/form-signatures/gohan-ssj2.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-signature"
+    },
+    {
+      "key": "gohan-ultimate-signature-cast",
+      "file": "form-signatures/gohan-ultimate.png",
+      "runtime": "packed/form-signatures/gohan-ultimate.png",
+      "source": "source/form-signatures/gohan-ultimate.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-signature"
+    },
+    {
+      "key": "goku-base-signature-cast",
+      "file": "form-signatures/goku-base.png",
+      "runtime": "packed/form-signatures/goku-base.png",
+      "source": "source/form-signatures/goku-base.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-signature"
+    },
+    {
+      "key": "goku-blue-signature-cast",
+      "file": "form-signatures/goku-blue.png",
+      "runtime": "packed/form-signatures/goku-blue.png",
+      "source": "source/form-signatures/goku-blue.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-signature"
+    },
+    {
+      "key": "goku-god-signature-cast",
+      "file": "form-signatures/goku-god.png",
+      "runtime": "packed/form-signatures/goku-god.png",
+      "source": "source/form-signatures/goku-god.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-signature"
+    },
+    {
+      "key": "goku-ssj-signature-cast",
+      "file": "form-signatures/goku-ssj.png",
+      "runtime": "packed/form-signatures/goku-ssj.png",
+      "source": "source/form-signatures/goku-ssj.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-signature"
+    },
+    {
+      "key": "goku-ssj2-signature-cast",
+      "file": "form-signatures/goku-ssj2.png",
+      "runtime": "packed/form-signatures/goku-ssj2.png",
+      "source": "source/form-signatures/goku-ssj2.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-signature"
+    },
+    {
+      "key": "goku-ssj3-signature-cast",
+      "file": "form-signatures/goku-ssj3.png",
+      "runtime": "packed/form-signatures/goku-ssj3.png",
+      "source": "source/form-signatures/goku-ssj3.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-signature"
+    },
+    {
+      "key": "goku-ui-signature-cast",
+      "file": "form-signatures/goku-ui.png",
+      "runtime": "packed/form-signatures/goku-ui.png",
+      "source": "source/form-signatures/goku-ui.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-signature"
+    },
+    {
+      "key": "vegeta-base-signature-cast",
+      "file": "form-signatures/vegeta-base.png",
+      "runtime": "packed/form-signatures/vegeta-base.png",
+      "source": "source/form-signatures/vegeta-base.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-signature"
+    },
+    {
+      "key": "vegeta-blue-signature-cast",
+      "file": "form-signatures/vegeta-blue.png",
+      "runtime": "packed/form-signatures/vegeta-blue.png",
+      "source": "source/form-signatures/vegeta-blue.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-signature"
+    },
+    {
+      "key": "vegeta-god-signature-cast",
+      "file": "form-signatures/vegeta-god.png",
+      "runtime": "packed/form-signatures/vegeta-god.png",
+      "source": "source/form-signatures/vegeta-god.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-signature"
+    },
+    {
+      "key": "vegeta-ssj-signature-cast",
+      "file": "form-signatures/vegeta-ssj.png",
+      "runtime": "packed/form-signatures/vegeta-ssj.png",
+      "source": "source/form-signatures/vegeta-ssj.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-signature"
+    },
+    {
+      "key": "vegeta-ssj2-signature-cast",
+      "file": "form-signatures/vegeta-ssj2.png",
+      "runtime": "packed/form-signatures/vegeta-ssj2.png",
+      "source": "source/form-signatures/vegeta-ssj2.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-signature"
+    },
+    {
+      "key": "vegeta-ue-signature-cast",
+      "file": "form-signatures/vegeta-ue.png",
+      "runtime": "packed/form-signatures/vegeta-ue.png",
+      "source": "source/form-signatures/vegeta-ue.png",
+      "rows": 4,
+      "cell": 96,
+      "frames": 16,
+      "anchors": [
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        },
+        {
+          "ground": 84
+        }
+      ],
+      "artStatus": "authored-form-signature"
     }
   ]
 }

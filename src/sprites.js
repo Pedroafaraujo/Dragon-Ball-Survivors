@@ -1,4 +1,5 @@
-import { enemyArt, ENEMY_ART, PACK_ROWS } from "./animation-assets.js";
+import { enemyArt, ENEMY_ART } from "./animation-assets.js";
+import { animationTextures } from "./animation-textures.js";
 /** PNG presentation layer. It never changes a game entity or its statistics. */
 import {
   FORM_FILES,
@@ -192,14 +193,8 @@ export function drawCell(ctx, key, col, row, x, y, width = 96, height = width) {
   return true;
 }
 export function prepareAnimation(id, form = 0) {
-  const suffix = FORM_FILES[id][Math.min(form, FORM_FILES[id].length - 1)];
-  return Promise.all(
-    Object.entries(PACK_ROWS).map(([kind, rows]) => {
-      const key =
-        suffix === "base" ? `${id}-${kind}` : `${id}-${suffix}-${kind}`;
-      return loadSheet(key, `animation/${key}.png`, rows, 66);
-    }),
-  );
+  return Promise.all(animationTextures(id, form).map(({ key, file, rows }) =>
+    loadSheet(key, file, rows, 66)));
 }
 export function prepareEnemy(id) {
   return Promise.all(
@@ -214,12 +209,8 @@ export function prepareEnemy(id) {
   );
 }
 export function formSheetsReady(id, form) {
-  const prefix = characterKey(id, form);
-  if (!cache.has(prefix)) return false;
-  const suffix = FORM_FILES[id][Math.min(form, FORM_FILES[id].length - 1)];
-  return Object.keys(PACK_ROWS).every((kind) =>
-    cache.has(suffix === "base" ? `${id}-${kind}` : `${id}-${suffix}-${kind}`),
-  );
+  return cache.has(characterKey(id, form)) &&
+    animationTextures(id, form).every(({ key }) => cache.has(key));
 }
 function poseSheet(id, form, sample) {
   const pose = playerFrame(id, form, sample);
@@ -252,8 +243,8 @@ export function drawFighter(
       };
   const pose = poseSheet(c.id, form, sample);
   ctx.imageSmoothingEnabled = false;
-  // These atlases are full-body poses. No common waist/pelvis rig exists.
-  // One complete frame is the explicit moving-attack fallback.
+  // Every route draws one complete actor. Moving attacks use authored whole-body
+  // gait frames; unsupported strafe/pose combinations keep a complete fallback.
   return drawCell(ctx, pose.key, pose.frame, pose.row, -48, -66);
 }
 export function drawEnemySprite(ctx, e, size = 96) {

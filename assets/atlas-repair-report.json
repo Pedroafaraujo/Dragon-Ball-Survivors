@@ -8,7 +8,50 @@
         12,
         12
       ],
-      "splitColumns": []
+      "splitColumns": [],
+      "poseCuration": {
+        "file": "assets/pose-curation.json",
+        "cells": [
+          {
+            "row": 1,
+            "frame": 3,
+            "fromRow": 1,
+            "fromFrame": 0,
+            "mirror": false,
+            "reason": "The final charge cell turned away."
+          },
+          {
+            "row": 5,
+            "frame": 1,
+            "fromRow": 6,
+            "fromFrame": 1,
+            "mirror": true,
+            "reason": "The west hand extended behind the left-facing body."
+          },
+          {
+            "row": 9,
+            "frame": 1,
+            "fromRow": 10,
+            "fromFrame": 1,
+            "mirror": true,
+            "reason": "The west release extended behind the left-facing body."
+          }
+        ],
+        "oppositeRows": [
+          [
+            1,
+            2
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            9,
+            10
+          ]
+        ]
+      }
     },
     "buu-motion": {
       "sourceHash": "036c62d3328ce585a6ba20b8305f484b80abb4a87b1120b827904e842c59c4d8",
@@ -319,7 +362,41 @@
         12
       ],
       "splitColumns": [],
-      "eastPoseCorrection": "complete west rows mirrored; discarded back-facing east cells"
+      "poseCuration": {
+        "file": "assets/pose-curation.json",
+        "cells": [
+          {
+            "row": 5,
+            "frame": 1,
+            "fromRow": 9,
+            "fromFrame": 2,
+            "mirror": false,
+            "reason": "The left-facing body extended a palm backwards; use a complete west extension."
+          },
+          {
+            "row": 9,
+            "frame": 1,
+            "fromRow": 9,
+            "fromFrame": 1,
+            "mirror": true,
+            "reason": "The launch faced east between west-facing preparation and impact."
+          }
+        ],
+        "oppositeRows": [
+          [
+            1,
+            2
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            9,
+            10
+          ]
+        ]
+      }
     },
     "gohan-motion": {
       "sourceHash": "153c8f470967c626bfa009cea9eedd9650ff78fc870842c896b544fb3f72f3a1",
@@ -349,7 +426,34 @@
         12,
         12
       ],
-      "splitColumns": []
+      "splitColumns": [],
+      "poseCuration": {
+        "file": "assets/pose-curation.json",
+        "cells": [
+          {
+            "row": 5,
+            "frame": 2,
+            "fromRow": 6,
+            "fromFrame": 2,
+            "mirror": true,
+            "reason": "The west extension turned front; the complete east extension has a consistent profile."
+          }
+        ],
+        "oppositeRows": [
+          [
+            1,
+            2
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            9,
+            10
+          ]
+        ]
+      }
     },
     "goku-motion": {
       "sourceHash": "031ad2c8a4c5f5631a40e249bd8d1b90c2325c9735cb469d0b86ca9c37317e35",
@@ -398,7 +502,73 @@
         12
       ],
       "splitColumns": [],
-      "eastPoseCorrection": "complete west rows mirrored; discarded back-facing east cells"
+      "poseCuration": {
+        "file": "assets/pose-curation.json",
+        "cells": [
+          {
+            "row": 5,
+            "frame": 0,
+            "fromRow": 5,
+            "fromFrame": 0,
+            "mirror": true,
+            "reason": "The entire west attack row actually faced east."
+          },
+          {
+            "row": 5,
+            "frame": 1,
+            "fromRow": 5,
+            "fromFrame": 1,
+            "mirror": true,
+            "reason": "The entire west attack row actually faced east."
+          },
+          {
+            "row": 5,
+            "frame": 2,
+            "fromRow": 5,
+            "fromFrame": 2,
+            "mirror": true,
+            "reason": "The entire west attack row actually faced east."
+          },
+          {
+            "row": 5,
+            "frame": 3,
+            "fromRow": 5,
+            "fromFrame": 3,
+            "mirror": true,
+            "reason": "The entire west attack row actually faced east."
+          },
+          {
+            "row": 9,
+            "frame": 1,
+            "fromRow": 9,
+            "fromFrame": 1,
+            "mirror": true,
+            "reason": "Release turned both the face and palms east."
+          },
+          {
+            "row": 9,
+            "frame": 2,
+            "fromRow": 9,
+            "fromFrame": 2,
+            "mirror": true,
+            "reason": "Release turned both the face and palms east."
+          }
+        ],
+        "oppositeRows": [
+          [
+            1,
+            2
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            9,
+            10
+          ]
+        ]
+      }
     },
     "krillin-motion": {
       "sourceHash": "6506734bddcd91d931a33d4d99716f5cd4302a3adb0ca75c222d32351eff1ad0",
@@ -428,7 +598,25 @@
         12,
         12
       ],
-      "splitColumns": []
+      "splitColumns": [],
+      "poseCuration": {
+        "file": "assets/pose-curation.json",
+        "cells": [],
+        "oppositeRows": [
+          [
+            1,
+            2
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            9,
+            10
+          ]
+        ]
+      }
     },
     "vegeta-motion": {
       "sourceHash": "b3f9a7a8bf47938c1fed1ea8623fbf76a60bf4f1280219e1ba63d36ec0dd392c",

@@ -1,0 +1,154 @@
+{
+  "description": "Whole-cell curation after visual review of the facing and extended hand. No body-part composition.",
+  "combat": {
+    "goku": {
+      "cells": [
+        {
+          "row": 5,
+          "frame": 2,
+          "fromRow": 6,
+          "fromFrame": 2,
+          "mirror": true,
+          "reason": "The west extension turned front; the complete east extension has a consistent profile."
+        }
+      ]
+    },
+    "vegeta": {
+      "cells": []
+    },
+    "buu": {
+      "cells": [
+        {
+          "row": 1,
+          "frame": 3,
+          "fromRow": 1,
+          "fromFrame": 0,
+          "mirror": false,
+          "reason": "The final charge cell turned away."
+        },
+        {
+          "row": 5,
+          "frame": 1,
+          "fromRow": 6,
+          "fromFrame": 1,
+          "mirror": true,
+          "reason": "The west hand extended behind the left-facing body."
+        },
+        {
+          "row": 9,
+          "frame": 1,
+          "fromRow": 10,
+          "fromFrame": 1,
+          "mirror": true,
+          "reason": "The west release extended behind the left-facing body."
+        }
+      ]
+    },
+    "krillin": {
+      "cells": [
+        {
+          "row": 5,
+          "frame": 0,
+          "fromRow": 5,
+          "fromFrame": 0,
+          "mirror": true,
+          "reason": "The entire west attack row actually faced east."
+        },
+        {
+          "row": 5,
+          "frame": 1,
+          "fromRow": 5,
+          "fromFrame": 1,
+          "mirror": true,
+          "reason": "The entire west attack row actually faced east."
+        },
+        {
+          "row": 5,
+          "frame": 2,
+          "fromRow": 5,
+          "fromFrame": 2,
+          "mirror": true,
+          "reason": "The entire west attack row actually faced east."
+        },
+        {
+          "row": 5,
+          "frame": 3,
+          "fromRow": 5,
+          "fromFrame": 3,
+          "mirror": true,
+          "reason": "The entire west attack row actually faced east."
+        },
+        {
+          "row": 9,
+          "frame": 1,
+          "fromRow": 9,
+          "fromFrame": 1,
+          "mirror": true,
+          "reason": "Release turned both the face and palms east."
+        },
+        {
+          "row": 9,
+          "frame": 2,
+          "fromRow": 9,
+          "fromFrame": 2,
+          "mirror": true,
+          "reason": "Release turned both the face and palms east."
+        }
+      ]
+    },
+    "gohan": {
+      "cells": [
+        {
+          "row": 5,
+          "frame": 1,
+          "fromRow": 9,
+          "fromFrame": 2,
+          "mirror": false,
+          "reason": "The left-facing body extended a palm backwards; use a complete west extension."
+        },
+        {
+          "row": 9,
+          "frame": 1,
+          "fromRow": 9,
+          "fromFrame": 1,
+          "mirror": true,
+          "reason": "The launch faced east between west-facing preparation and impact."
+        }
+      ]
+    }
+  },
+  "oppositeRows": [
+    [
+      1,
+      2
+    ],
+    [
+      5,
+      6
+    ],
+    [
+      9,
+      10
+    ]
+  ],
+  "signature": {
+    "krillin": {
+      "mirrorWestFrames": [
+        0,
+        1
+      ],
+      "reason": "Kienzan's raised-hand preparation faced east in the west row."
+    }
+  },
+  "moving": {
+    "goku-charge": {
+      "mirrorCells": [
+        [
+          0,
+          2
+        ]
+      ],
+      "reason": "The third frontal charge swapped the gathering hands to the other side; mirror this complete newly drawn actor, not individual parts."
+    }
+  }
+}

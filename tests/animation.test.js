@@ -179,7 +179,7 @@ test("authored animation atlases cover all five players, forms and nine enemy va
   const m = JSON.parse(
     readFileSync(new URL("../assets/animation-manifest.json", import.meta.url)),
   );
-  assert.equal(m.sheets.length, 100);
+  assert.equal(m.sheets.filter(s => !s.artStatus?.startsWith("authored-moving-") && !["authored-form-cast", "authored-form-signature"].includes(s.artStatus)).length, 100);
   for (const sheet of m.sheets) {
     const png = readFileSync(
       new URL("../assets/" + sheet.runtime, import.meta.url),

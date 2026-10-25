@@ -1,4 +1,4 @@
-import { FRAME_DATA } from "./frame-data.js";
+import { ALL_FRAME_DATA } from "./frame-metadata.js";
 import { playerFrame, enemyFrame } from "./sprite-layout.js";
 import { enemyArt } from "./animation-assets.js";
 /** Deterministic animation clocks. No DOM, drawing or combat rules. */
@@ -216,7 +216,20 @@ export class Animator {
       : state === "idle"
         ? (this.idleTime / def.duration) % 1
         : this.travel % 1;
-    if (a?.combatSample) return a.combatSample;
+    if (a?.combatSample) {
+      const sample = a.combatSample;
+      if (this.motion === "idle") return sample;
+      if (sample.combatPhase === "recovery" && sample.phase > 0.72)
+        return { ...this.sample(false), combatPhase: sample.combatPhase, technique: sample.technique };
+      let role = null;
+      if (sample.combatPhase === "charge")
+        role = a.hand === "overhead" ? "overhead" : a.hand === "forehead" ? "forehead" : "charge";
+      else if (["launch", "impact"].includes(sample.combatPhase))
+        role = sample.technique === "taiyoken" ? "forehead" : "cast";
+      if (role)
+        return { ...sample, movementRole: role, movementFrame: Math.floor((this.travel % 1) * 4), movementDirection: this.direction };
+      return sample;
+    }
     if (a?.contactTiming) {
       const { windup, active } = a.contactTiming;
       return {
@@ -284,7 +297,7 @@ export function handAnchor(entity, direction, style = "palm") {
             sample,
           )
         : null;
-    const metadata = pose && FRAME_DATA[pose.key]?.[pose.row * 4 + pose.frame];
+    const metadata = pose && ALL_FRAME_DATA[pose.key]?.[pose.row * 4 + pose.frame];
     if (metadata) {
       const anchor = style === "forehead" && metadata.length >= 10 ? 8 : style === "overhead" && metadata.length >= 12 ? 10 : 4;
       const hx = metadata[anchor], hy = metadata[anchor + 1];
