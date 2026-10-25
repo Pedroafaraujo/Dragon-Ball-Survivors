@@ -29,19 +29,12 @@ export function transform(g) {
   if (next > p.form) {
     const gained = next - p.form;
     const a = animator(p);
-    a.formFrom = p.form;
-    a.changedForm = false;
-    a.play("transform", {
-      force: true,
-      duration: 0.9,
-      token: Symbol("transform"),
-    });
+    a.beginTransformation(a.visualForm ?? p.form, next);
     p.form = next;
     if (g.character.id === "buu") p.regen += gained * 0.7;
     if (g.character.id === "krillin")
       p.crit = Math.min(0.8, p.crit + gained * 0.035);
     p.hp = Math.min(p.maxHp, p.hp + 25);
-    g.effects.burst(p.x, p.y, appearance(g.character, next).aura, 8);
     g.notice(`${g.character.forms[next]} · PODER DESPERTADO`, 3);
   }
 }

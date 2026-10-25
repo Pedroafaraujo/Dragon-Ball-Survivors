@@ -118,7 +118,7 @@ export class UI {
     );
     $("xp").style.width = `${(p.xp / xpNeeded(p.level)) * 100}%`;
     $("form").textContent =
-      `${g.character.name.toUpperCase()} · ${g.character.forms[p.form]}`;
+      `${g.character.name.toUpperCase()} · ${g.character.forms[p.anim?.visualForm ?? p.form]}`;
     $("level").textContent =
       `NV ${p.level} · ${Math.ceil(p.hp)} / ${p.maxHp} HP`;
     $("timer").textContent =

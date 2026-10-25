@@ -27,10 +27,18 @@ export function fighter(
   ctx.save();
   ctx.imageSmoothingEnabled = false;
   shadow(ctx, 0, 18);
-  if (form > 0) {
+  const transition = anim?.transformationView();
+  if (form > 0 || transition) {
     ctx.save();
-    ctx.globalAlpha = 0.65;
-    const formName = c.forms[form];
+    ctx.globalAlpha =
+      transition?.phase === "prepare"
+        ? 0.08
+        : transition && !transition.swapped
+          ? 0.15 + transition.aura * 0.5
+          : 0.65;
+    const formName = c.forms[transition ? anim.transformation.to : form];
+    const growth =
+      transition && !transition.swapped ? 0.45 + transition.aura * 0.55 : 1;
     const cadence =
       formName === "Ultra Instinct"
         ? 5
@@ -47,8 +55,10 @@ export function fighter(
       Math.floor(time * cadence) % 4,
       0,
       -17,
-      formName === "SSJ3" ? 98 : 84,
-      formName === "SSJ3" ? 132 : c.id === "krillin" ? 86 : 112,
+      Math.round((formName === "SSJ3" ? 98 : 84) * growth),
+      Math.round(
+        (formName === "SSJ3" ? 132 : c.id === "krillin" ? 86 : 112) * growth,
+      ),
     );
     if (!drawn)
       effect(
@@ -275,7 +285,11 @@ function castEffects(g, alpha = 1) {
       continue;
     const d = cast.def,
       progress = Math.min(1, cast.elapsed / (d.windup + d.charge)),
-      hand = handAnchor(pp, cast.direction, d.hand);
+      hand = handAnchor(
+        { ...g.player, x: pp.x, y: pp.y },
+        cast.direction,
+        d.hand,
+      );
     const size =
       (cast.channel === 0
         ? 10
@@ -364,11 +378,7 @@ export function draw(g, alpha = 1) {
     if (e.kind === "obstacle") obstacle(ctx, e.o, e.index);
     else if (e.kind === "enemy") enemy(ctx, e.o, g.time, alpha);
     else {
-      const visualForm =
-        p.anim?.action?.state === "transform" &&
-        p.anim.action.elapsed / p.anim.action.duration < 0.5
-          ? (p.anim.formFrom ?? p.form)
-          : p.form;
+      const visualForm = p.anim?.visualForm ?? p.form;
       ctx.save();
       ctx.translate(Math.round(pos.x), Math.round(pos.y));
       if (p.invuln > 0) ctx.globalAlpha = 0.45 + Math.sin(g.time * 40) * 0.3;
@@ -443,6 +453,11 @@ export function draw(g, alpha = 1) {
   }
   ctx.globalAlpha = 1;
   ctx.restore();
+  const transitionFlash = g.player?.anim?.transformationView()?.flash || 0;
+  if (transitionFlash > 0) {
+    ctx.fillStyle = `rgba(235,250,255,${transitionFlash * 0.6})`;
+    ctx.fillRect(0, 0, w, h);
+  }
   if (g.flash > 0) {
     ctx.fillStyle = `rgba(239,244,209,${g.flash * 0.3})`;
     ctx.fillRect(0, 0, w, h);

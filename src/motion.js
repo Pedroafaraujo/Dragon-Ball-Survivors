@@ -8,6 +8,13 @@ export function playerMotion(g, input, dt) {
   const p = g.player,
     max = p.speed * (1 + p.form * 0.035),
     stopping = Math.hypot(input.x, input.y) < 0.01;
+  if (p.anim?.action?.state === "transform") {
+    p.prevX = p.x;
+    p.prevY = p.y;
+    p.vx = p.vy = 0;
+    animateMotion(p, p.x, p.y, dt, max);
+    return;
+  }
   const acceleration = stopping ? 2600 : 1900;
   const dx = input.x * max - (p.vx || 0),
     dy = input.y * max - (p.vy || 0),

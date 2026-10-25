@@ -39,10 +39,10 @@ A técnica secundária desbloqueia no nível 3 e a final no nível 8. Personagen
 - Aceleração vetorial alcança a velocidade existente em cerca de 100 ms; a travagem demora menos de 100 ms. Diagonais não aumentam a velocidade máxima.
 - Mudanças de direção preservam a fase do passo e usam histerese para evitar oscilações nos movimentos diagonais.
 - O ponto de apoio dos sprites normalizados é o pixel 84 da célula; a sombra usa o mesmo chão.
-- Tronco em ataque/carregamento e pernas em marcha são camadas separadas quando o ator se move. A mistura usa poses desenhadas, não rotações de um corpo parado.
+- Ataques em movimento usam uma pose completa de ataque. Não se misturam pernas e troncos de animações incompatíveis; o movimento físico continua permitido.
 - Física e animação avançam em passos fixos de 1/60 s, com delta time e interpolação visual de posições. Pausa e perda de foco suspendem o combate.
 
-**Quatro direções** são suportadas. Não existem oito vistas desenhadas. Algumas vistas laterais em falta nos mestres foram espelhadas durante a normalização; isso está documentado nos scripts de packing. As formas usam os novos corpos animados com paletas de cabelo próprias e camadas adicionais nas silhuetas SSJ3/Beast. As técnicas de assinatura usam poses específicas; não foram desenhados à mão todos os cruzamentos de técnica × forma.
+**Quatro direções** são suportadas. Não existem oito vistas desenhadas. Algumas vistas laterais em falta nos mestres foram espelhadas durante a normalização; isso está documentado nos scripts de packing. Cada forma usa o seu próprio sprite completo. As formas sem poses de combate específicas usam temporariamente a guarda completa da forma, identificada no manifesto; não se recolore o corpo base nem se sobrepõe cabelo. As cinco formas base mantêm poses de assinatura próprias.
 
 ## Inimigos
 
@@ -68,12 +68,13 @@ A separação usa uma grelha espacial e impulsos limitados; não muda os obstác
 
 Feixes nascem nas âncoras das mãos e acompanham a posição do emissor. A frente animada do feixe determina quando os alvos são atingidos; um conjunto de alvos impede dano repetido no mesmo lançamento. Discos/projéteis usam colisão varrida para não atravessarem inimigos a FPS baixos. Esferas só aplicam dano de área quando chegam ao destino. Explosões têm expansão e dissipação. Impactos fortes produzem um hit stop limitado a 32 ms, reação, números de dano e shake moderado, respeitando a definição de câmara.
 
-Transformações têm pose de concentração, carga, flash e mudança visual a meio do clip, depois regressam ao combate. Os bónus de progressão mantêm os marcos anteriores. Auras dourada, God, Blue, Ultra Instinct, Ultra Ego e Beast têm silhuetas e frames diferentes, além de ritmos próprios.
+Transformações interrompem brevemente movimento e novos ataques: preparação, aura crescente, flash breve, troca única pelo corpo completo e recuperação. A troca aguarda os assets da forma alvo; projéteis já lançados continuam a existir. Os bónus de progressão mantêm os marcos anteriores. Auras dourada, God, Blue, Ultra Instinct, Ultra Ego e Beast têm silhuetas e frames diferentes, além de ritmos próprios.
 
 ## Inspecionar e testar
 
 Com o servidor ativo:
 
+- `tools/frame-review.html`: inspeção individual de todas as folhas, limites, chão, âncora da mão e estatuto de arte.
 - `tools/animation-review.html`: estúdio com os dez estados dos cinco personagens, quatro direções, câmara lenta e apoio dos pés.
 - `tools/art-review.html`: galeria de formas.
 
@@ -92,6 +93,7 @@ Testes opcionais de navegador usam Playwright e um Chromium instalado. Com o ser
 npm install --no-save --package-lock=false playwright
 CHROMIUM_PATH=/usr/bin/chromium node tools/browser-smoke.cjs
 CHROMIUM_PATH=/usr/bin/chromium node tools/animation-smoke.cjs
+CHROMIUM_PATH=/usr/bin/chromium node tools/verify-sprite-fix.cjs
 ```
 
 `GAME_URL` permite outro endereço de servidor. O teste de animação verifica 960 amostras de poses de jogadores/inimigos, 14 linhas temporais de técnicas em movimento, transformação, duas fases de Freeza e um gesto tátil real em viewport Android através do protocolo do Chromium. O teste de fluxo verifica pausa, níveis, vitória/derrota e persistência. `?test` expõe `window.__game` para instrumentação local; não altera as regras normais.
@@ -99,26 +101,25 @@ CHROMIUM_PATH=/usr/bin/chromium node tools/animation-smoke.cjs
 ## Assets e otimização
 
 - `assets/manifest.json`: as 23 folhas de base existentes.
-- `assets/animation-manifest.json`: 99 folhas adicionais de animação/assinaturas/auras, incluindo variantes de cabelo geradas na normalização.
+- `assets/animation-manifest.json`: 99 folhas adicionais de animação/assinaturas/auras, com corpos completos por forma e fallbacks explicitamente identificados.
 - `assets/source/`: todos os mestres PNG originais; não são descarregados pelo jogo normal.
-- `assets/packed/`: texturas normalizadas, com células RGBA de 96 × 96 e quatro colunas. Todas as texturas somam cerca de **14,4 MiB**, mas a execução modular carrega as formas conforme necessário.
+- `assets/packed/`: texturas normalizadas, com células RGBA de 96 × 96 e quatro colunas. A execução modular carrega as formas conforme necessário; um teste mantém o total abaixo de 16 MiB.
 - `assets/animation-layouts.json`: recortes corrigidos para os mestres com espaçamento/linhas irregulares.
 
-Os PNG de corpos têm transparência limpa e paletas quantizadas, com nearest-neighbor e sem filtros de blur no combate. As fontes de maior resolução são mantidas sem alterações. O packing é técnico: recorte, alinhamento, espelhamento lateral e composição das camadas de cabelo; não substitui poses de ação por geometria.
+Os PNG de corpos têm transparência limpa e paletas quantizadas, com nearest-neighbor e sem filtros de blur no combate. As fontes de maior resolução são mantidas sem alterações. O packing extrai atores completos dos mestres por componentes de alpha, com alinhamento ao chão e eixo do corpo. `assets/atlas-repair-report.json` regista a proveniência; `src/frame-data.js` fornece os limites e mãos por frame. Não há composição de cabelo.
 
 Limites: 180 inimigos comuns (boss pode usar uma vaga adicional), 300 partículas, pools de 180 projéteis por grupo, 24 cadáveres, 30 números de dano, 12 explosões visuais e oito feixes desenhados. Hitboxes continuam a usar os valores de área reais; dimensões de efeitos muito grandes são limitadas apenas no desenho. A resolução continua limitada a 2×. Não é garantido 60 FPS em todos os Android.
 
 Os PNG prontos estão incluídos; não é necessário fazer build para jogar ou publicar. Para reconstruir texturas após editar mestres, usa as dependências opcionais e o servidor local:
 
 ```sh
-node tools/pack-assets.cjs
-node tools/pack-animation.cjs
-node tools/pack-signatures.cjs
-node tools/optimize-animation.cjs
+python3 -m pip install -r tools/requirements-assets.txt
+python3 tools/repair-atlases.py
+python3 tools/make-repair-previews.py
 python3 tools/export-standalone.py Dragon-Ball-Survivors.html
 ```
 
-Os scripts respeitam `CHROMIUM_PATH` e `GAME_URL`. A exportação HTML inclui todas as texturas e todos os módulos numa distribuição offline maior.
+Os testes de navegador respeitam `CHROMIUM_PATH` e `GAME_URL`. Os antigos pack-animation/pack-signatures/optimize-animation delegam agora no reparador seguro; não regenerar as animações com recortes uniformes. A exportação HTML inclui todas as texturas e todos os módulos numa distribuição offline maior.
 
 ## Publicar e descarregar
 
@@ -126,4 +127,6 @@ O repositório pode ser descarregado pelo botão **Code → Download ZIP**. Para
 
 ## Limitações concretas
 
-A arte é original, criada para este projeto com assistência de IA, e ainda beneficia de revisão manual pixel a pixel, sobretudo nas transições de silhueta entre famílias de poses e nas camadas de cabelo das formas. Algumas vistas laterais são espelhadas; não há animação em oito direções. Não há blending esquelético ou IK: a composição usa os PNG desenhados e âncoras fixas. Foram testados Chromium desktop e viewport Android com toque simulado; não houve teste num telemóvel físico nem uma partida manual completa de 20 minutos. Os novos timings de contacto/knockback precisam de balanceamento prolongado. Áudio e arenas adicionais continuam fora desta revisão.
+A correção reutiliza a arte original existente, sem chamadas a APIs. Não foram desenhadas novas poses para todas as transformações: 45 folhas de ação/reação/assinatura usam a guarda completa da forma; 15 folhas de locomoção transformada reutilizam os passos completos existentes. Não se anuncia corrida ou ataque exclusivo onde não existe arte adequada. Buu, Burter e Jeice usam os passos frontais completos existentes onde o mestre não tinha corrida frontal. Algumas vistas laterais são espelhadas; não há oito direções.
+
+Há 23 testes automáticos, incluindo a integridade dos 3.600 frames de animação e 320 frames das formas completas. A validação visual e capturas estão em [docs/animation-validation.md](docs/animation-validation.md), e as causas em [docs/animation-diagnosis.md](docs/animation-diagnosis.md). Foram testados Chromium desktop e viewport Android com toque simulado; não houve teste num telemóvel físico nem partida manual completa de 20 minutos. A qualidade das poses originais ainda beneficia de revisão artística manual.

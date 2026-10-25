@@ -1,13 +1,13 @@
 import { enemyArt, ENEMY_ART, PACK_ROWS } from "./animation-assets.js";
 /** PNG presentation layer. It never changes a game entity or its statistics. */
-export const FORM_FILES = {
-  goku: ["base", "ssj", "ssj2", "ssj3", "god", "blue", "ui"],
-  vegeta: ["base", "ssj", "ssj2", "god", "blue", "ue"],
-  gohan: ["base", "ssj", "ssj2", "ultimate", "beast"],
-  buu: ["base"],
-  krillin: ["base"],
-};
-export const DIRECTIONS = ["south", "west", "east", "north"];
+import {
+  FORM_FILES,
+  DIRECTIONS,
+  characterKey,
+  playerFrame,
+  enemyFrame,
+} from "./sprite-layout.js";
+export { FORM_FILES, DIRECTIONS, characterKey } from "./sprite-layout.js";
 const characterSizes = {
   goku: 66,
   vegeta: 64,
@@ -147,10 +147,6 @@ export function loadSheet(key, file, rows = 4, size = 66, trim = true) {
   loading.set(key, promise);
   return promise;
 }
-export function characterKey(id, form = 0) {
-  const forms = FORM_FILES[id];
-  return `${id}-${forms[Math.min(form, forms.length - 1)]}`;
-}
 export function prepareCharacter(id) {
   prepareAnimation(id, 0).catch(() => {});
   return Promise.all(
@@ -173,6 +169,15 @@ export function sheetErrors() {
 export function drawCell(ctx, key, col, row, x, y, width = 96, height = width) {
   const sheet = cache.get(key);
   if (!sheet) return false;
+  if (
+    !Number.isInteger(col) ||
+    !Number.isInteger(row) ||
+    col < 0 ||
+    col >= 4 ||
+    row < 0 ||
+    row >= sheet.rows
+  )
+    return false;
   ctx.drawImage(
     sheet.image,
     col * sheet.cell,
@@ -208,24 +213,23 @@ export function prepareEnemy(id) {
     ),
   );
 }
+export function formSheetsReady(id, form) {
+  const prefix = characterKey(id, form);
+  if (!cache.has(prefix)) return false;
+  const suffix = FORM_FILES[id][Math.min(form, FORM_FILES[id].length - 1)];
+  return Object.keys(PACK_ROWS).every((kind) =>
+    cache.has(suffix === "base" ? `${id}-${kind}` : `${id}-${suffix}-${kind}`),
+  );
+}
 function poseSheet(id, form, sample) {
-  if (sample.pack === "base")
-    return {
-      key: characterKey(id, form),
-      row: DIRECTIONS.indexOf(sample.direction),
-      frame: sample.frame,
-    };
-  const suffix = FORM_FILES[id][Math.min(form, FORM_FILES[id].length - 1)],
-    key =
-      suffix === "base"
-        ? `${id}-${sample.pack}`
-        : `${id}-${suffix}-${sample.pack}`;
-  if (!cache.has(key) && !loading.has(key))
-    prepareAnimation(id, form).catch(() => {});
+  const pose = playerFrame(id, form, sample);
+  if (cache.has(pose.key)) return pose;
+  if (!loading.has(pose.key)) prepareAnimation(id, form).catch(() => {});
+  // A missing form may wait on its complete guard sprite, never another model.
   return {
-    key: cache.has(key) ? key : `${id}-${sample.pack}`,
-    row: sample.group + DIRECTIONS.indexOf(sample.direction),
-    frame: sample.frame,
+    key: characterKey(id, form),
+    row: Math.max(0, DIRECTIONS.indexOf(sample.direction)),
+    frame: 0,
   };
 }
 export function drawFighter(
@@ -237,7 +241,7 @@ export function drawFighter(
   moving = false,
   anim = null,
 ) {
-  const sampled = anim
+  const sample = anim
     ? anim.sample()
     : {
         state: moving ? "run" : "idle",
@@ -246,27 +250,11 @@ export function drawFighter(
         frame: Math.floor(time * (moving ? 9 : 3)) % 4,
         direction,
       };
-  const active = poseSheet(c.id, form, sampled);
+  const pose = poseSheet(c.id, form, sample);
   ctx.imageSmoothingEnabled = false;
-  if (
-    anim?.action &&
-    anim.motion !== "idle" &&
-    ["attack", "charge", "cast", "transform"].includes(sampled.state)
-  ) {
-    const legs = poseSheet(c.id, form, anim.sample(false));
-    ctx.save();
-    ctx.beginPath();
-    ctx.rect(-48, -6, 96, 36);
-    ctx.clip();
-    drawCell(ctx, legs.key, legs.frame, legs.row, -48, -66);
-    ctx.restore();
-    ctx.save();
-    ctx.beginPath();
-    ctx.rect(-48, -66, 96, 60);
-    ctx.clip();
-    drawCell(ctx, active.key, active.frame, active.row, -48, -66);
-    ctx.restore();
-  } else drawCell(ctx, active.key, active.frame, active.row, -48, -66);
+  // These atlases are full-body poses. No common waist/pelvis rig exists.
+  // One complete frame is the explicit moving-attack fallback.
+  return drawCell(ctx, pose.key, pose.frame, pose.row, -48, -66);
 }
 export function drawEnemySprite(ctx, e, size = 96) {
   const id = enemyArt(e),
@@ -279,57 +267,21 @@ export function drawEnemySprite(ctx, e, size = 96) {
           group: 0,
           direction: "south",
           pack: "motion",
+          phase: 0,
         };
-  let kind = "motion",
-    row = 0,
-    frame = sample.frame;
-  if (["idle", "walk", "run"].includes(sample.state)) {
-    row =
-      (sample.state === "idle" ? 0 : 4) + DIRECTIONS.indexOf(sample.direction);
-    frame =
-      sample.state === "idle" ? sample.frame : Math.floor(sample.phase * 4) % 4;
-  } else {
-    kind = "combat";
-    const group =
-      sample.state === "death"
-        ? 8
-        : ["hurt", "knockback"].includes(sample.state)
-          ? 4
-          : 0;
-    row = group + DIRECTIONS.indexOf(sample.direction);
-  }
-  const key = `enemy-${id}-${kind}`;
-  if (!cache.has(key) && !loading.has(key)) prepareEnemy(id).catch(() => {});
-  const y = e.r - size + size * 0.125;
-  if (
-    a?.action &&
-    a.speed > 2 &&
-    ["attack", "charge", "cast"].includes(sample.state)
-  ) {
-    const legs = a.sample(false),
-      legRow = 4 + DIRECTIONS.indexOf(legs.direction);
-    ctx.save();
-    ctx.beginPath();
-    ctx.rect(-size / 2, y + size * 0.625, size, size * 0.375);
-    ctx.clip();
-    drawCell(
-      ctx,
-      `enemy-${id}-motion`,
-      Math.floor(legs.phase * 4) % 4,
-      legRow,
-      -size / 2,
-      y,
-      size,
-      size,
-    );
-    ctx.restore();
-    ctx.save();
-    ctx.beginPath();
-    ctx.rect(-size / 2, y, size, size * 0.625);
-    ctx.clip();
-    drawCell(ctx, key, frame, row, -size / 2, y, size, size);
-    ctx.restore();
-  } else drawCell(ctx, key, frame, row, -size / 2, y, size, size);
+  const pose = enemyFrame(id, sample);
+  if (!cache.has(pose.key) && !loading.has(pose.key))
+    prepareEnemy(id).catch(() => {});
+  return drawCell(
+    ctx,
+    pose.key,
+    pose.frame,
+    pose.row,
+    -size / 2,
+    e.r - size + size * 0.125,
+    size,
+    size,
+  );
 }
 
 const tints = new Map();

@@ -353,9 +353,10 @@ function launch(g, cast) {
       });
   }
 }
-export function advanceCasts(g, dt) {
+export function advanceCasts(g, dt, { suspendCasting = false } = {}) {
   const casts = g.casts || (g.casts = []);
   for (const cast of casts) {
+    if (suspendCasting) continue;
     const { def } = cast;
     cast.elapsed += dt;
     const release = def.windup + def.charge;
@@ -455,6 +456,10 @@ export function advanceCasts(g, dt) {
   reapProjectiles(g);
 }
 export function attack(g, dt) {
+  if (g.player.anim?.action?.state === "transform") {
+    advanceCasts(g, dt, { suspendCasting: true });
+    return;
+  }
   const p = g.player,
     c = g.character;
   g.shotClock -= dt;

@@ -1,0 +1,510 @@
+{
+  "sources": {
+    "buu-combat": {
+      "sourceHash": "a4d41a62dadf8b622d52a4bce9bbfe1b6b7e4e67e0494413652f88e5dda11c74",
+      "columnCounts": [
+        12,
+        12,
+        12,
+        12
+      ],
+      "splitColumns": []
+    },
+    "buu-motion": {
+      "sourceHash": "036c62d3328ce585a6ba20b8305f484b80abb4a87b1120b827904e842c59c4d8",
+      "columnCounts": [
+        7,
+        7,
+        7,
+        7
+      ],
+      "splitColumns": [],
+      "forwardGait": "existing complete front walk: left,passing,right,passing"
+    },
+    "buu-reaction": {
+      "sourceHash": "5ba553e20b02d5ffc385d26e2412c1afda8fc965d9b06e2ccd10df5a4673aefd",
+      "columnCounts": [
+        11,
+        11,
+        11,
+        11
+      ],
+      "splitColumns": []
+    },
+    "enemy-burter-combat": {
+      "sourceHash": "f4fc3cde4c3c20965c2836879483bcad0d01f7506234759581609e173abb4c09",
+      "columnCounts": [
+        11,
+        11,
+        11,
+        11
+      ],
+      "splitColumns": []
+    },
+    "enemy-burter-motion": {
+      "sourceHash": "8df22ae8f5963ccb12129a90de8f285381226de1713c9db9516891e18ddbe9bd",
+      "columnCounts": [
+        7,
+        7,
+        7,
+        7
+      ],
+      "splitColumns": [],
+      "forwardGait": "existing complete front walk: left,passing,right,passing"
+    },
+    "enemy-freeza-combat": {
+      "sourceHash": "9f4a896551eebe0973934865d981c80113b9e49bf0caddb3f13932430a42ab51",
+      "columnCounts": [
+        11,
+        11,
+        11,
+        11
+      ],
+      "splitColumns": []
+    },
+    "enemy-freeza-motion": {
+      "sourceHash": "1635f10d4e6a3145d7a22270c182c3cb7f21403e347d902ab712591c07f733ae",
+      "columnCounts": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "splitColumns": []
+    },
+    "enemy-freeza2-combat": {
+      "sourceHash": "44eb69828b957e2001663e749cf0e6072cba66612a7c426741c9c0b91ad992de",
+      "columnCounts": [
+        11,
+        11,
+        11,
+        11
+      ],
+      "splitColumns": []
+    },
+    "enemy-freeza2-motion": {
+      "sourceHash": "b925452f0d7bf628381d179a8cce8426a8e9d12629d68a71bc1ba8d651021298",
+      "columnCounts": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "splitColumns": []
+    },
+    "enemy-ginyu-combat": {
+      "sourceHash": "55bb3b8f6a5f6a74bb144880259d438785c3cf5e605d511cef5a3e82d6fa6486",
+      "columnCounts": [
+        11,
+        11,
+        11,
+        11
+      ],
+      "splitColumns": []
+    },
+    "enemy-ginyu-motion": {
+      "sourceHash": "9cba7b4e0922d84b6348c8e56460e3d1b02eedef696748bfc04e6bfa7c32935f",
+      "columnCounts": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "splitColumns": []
+    },
+    "enemy-guldo-combat": {
+      "sourceHash": "c1e68ea492c5dee33c6411604b9948e2ab187570892f32a6fc0cc5d4bf06f296",
+      "columnCounts": [
+        11,
+        11,
+        11,
+        11
+      ],
+      "splitColumns": []
+    },
+    "enemy-guldo-motion": {
+      "sourceHash": "1b1b7d8c20f19bf54adcffaa42fdd1d860002077c4b6c18e5f6b86774a8bebda",
+      "columnCounts": [
+        7,
+        7,
+        7,
+        7
+      ],
+      "splitColumns": []
+    },
+    "enemy-jeice-combat": {
+      "sourceHash": "e1c772d100b1f30e318bccee1d116fae62cda5bbb0b7e6bcbf999a1509e9a0e2",
+      "columnCounts": [
+        11,
+        11,
+        11,
+        11
+      ],
+      "splitColumns": []
+    },
+    "enemy-jeice-motion": {
+      "sourceHash": "59bfaa3aab69b7a395d9d6dfe6cfa9f0d569b87c37580a5ae7f70eb1971bbaf7",
+      "columnCounts": [
+        7,
+        7,
+        7,
+        7
+      ],
+      "splitColumns": [],
+      "forwardGait": "existing complete front walk: left,passing,right,passing"
+    },
+    "enemy-recoome-combat": {
+      "sourceHash": "e3f9572185134e7022a4017591e9f94dedbc18e0dcb5f00b88dbb15b534b4f57",
+      "columnCounts": [
+        9,
+        11,
+        11,
+        11
+      ],
+      "splitColumns": [
+        {
+          "column": 0,
+          "edges": [
+            0,
+            159,
+            294,
+            446,
+            599,
+            745,
+            900,
+            1047,
+            1174,
+            1299,
+            1403,
+            1536
+          ]
+        }
+      ]
+    },
+    "enemy-recoome-motion": {
+      "sourceHash": "54ab77ffc087094aa1d3a7bf0c2e7842efd437be8a0cce4e21b2bb53e18d07f2",
+      "columnCounts": [
+        6,
+        8,
+        7,
+        7
+      ],
+      "splitColumns": [
+        {
+          "column": 0,
+          "edges": [
+            0,
+            196,
+            396,
+            595,
+            784,
+            976,
+            1156,
+            1329,
+            1536
+          ]
+        },
+        {
+          "column": 2,
+          "edges": [
+            0,
+            195,
+            396,
+            595,
+            784,
+            975,
+            1155,
+            1329,
+            1536
+          ]
+        },
+        {
+          "column": 3,
+          "edges": [
+            0,
+            196,
+            396,
+            596,
+            784,
+            970,
+            1157,
+            1332,
+            1536
+          ]
+        }
+      ]
+    },
+    "enemy-saibaman-combat": {
+      "sourceHash": "ade9f510ab7dec52c9cc5dc94d48b6d91913c5283e74b9a68d6518e73368c072",
+      "columnCounts": [
+        10,
+        11,
+        11,
+        11
+      ],
+      "splitColumns": [
+        {
+          "column": 0,
+          "edges": [
+            0,
+            148,
+            272,
+            406,
+            551,
+            694,
+            834,
+            985,
+            1122,
+            1241,
+            1370,
+            1536
+          ]
+        }
+      ]
+    },
+    "enemy-saibaman-motion": {
+      "sourceHash": "2f4fb4b9db8187f056422181888bd50d0d8a7efdbbc717e9c1923d7cbb5a802b",
+      "columnCounts": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "splitColumns": []
+    },
+    "enemy-soldier-combat": {
+      "sourceHash": "e2236315a7ba570213a83e65e349af2b73032d044fe28e78b9e4429e3e5540c7",
+      "columnCounts": [
+        11,
+        11,
+        10,
+        11
+      ],
+      "splitColumns": [
+        {
+          "column": 2,
+          "edges": [
+            0,
+            152,
+            291,
+            443,
+            580,
+            726,
+            861,
+            1012,
+            1156,
+            1282,
+            1410,
+            1536
+          ]
+        }
+      ]
+    },
+    "enemy-soldier-motion": {
+      "sourceHash": "d9baf4a4d86116ce98866dbceef7e4e6f695b1d85a4d373d0ea2175a5ab18f70",
+      "columnCounts": [
+        7,
+        7,
+        7,
+        7
+      ],
+      "splitColumns": []
+    },
+    "gohan-combat": {
+      "sourceHash": "d887ef8357cadfb24c921f9c816cb8a26ce7114e069a4e622597a52d6490d54d",
+      "columnCounts": [
+        12,
+        12,
+        12,
+        12
+      ],
+      "splitColumns": []
+    },
+    "gohan-motion": {
+      "sourceHash": "153c8f470967c626bfa009cea9eedd9650ff78fc870842c896b544fb3f72f3a1",
+      "columnCounts": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "splitColumns": []
+    },
+    "gohan-reaction": {
+      "sourceHash": "fb02128f4923a1dfceb03db4e38482ec072a9468ca7d08e40f673f1475d1b8ef",
+      "columnCounts": [
+        12,
+        12,
+        12,
+        12
+      ],
+      "splitColumns": []
+    },
+    "goku-combat": {
+      "sourceHash": "be8d16ab894841ec72087269aee2e09f5e6fe59cdccc207e65464aabb304b22b",
+      "columnCounts": [
+        12,
+        12,
+        12,
+        12
+      ],
+      "splitColumns": []
+    },
+    "goku-motion": {
+      "sourceHash": "031ad2c8a4c5f5631a40e249bd8d1b90c2325c9735cb469d0b86ca9c37317e35",
+      "columnCounts": [
+        7,
+        7,
+        7,
+        7
+      ],
+      "splitColumns": []
+    },
+    "goku-reaction": {
+      "sourceHash": "6c70e5b42ee4825c0744932c24244cc759fca058327459ade071d29f35e2d41c",
+      "columnCounts": [
+        10,
+        11,
+        11,
+        11
+      ],
+      "splitColumns": [
+        {
+          "column": 0,
+          "edges": [
+            0,
+            158,
+            310,
+            460,
+            618,
+            766,
+            918,
+            1057,
+            1181,
+            1296,
+            1421,
+            1536
+          ]
+        }
+      ]
+    },
+    "krillin-combat": {
+      "sourceHash": "0887404edda0debd5fe5dbc0f026ed1a7588989906c4f562ac091013d632ac9f",
+      "columnCounts": [
+        12,
+        12,
+        12,
+        12
+      ],
+      "splitColumns": []
+    },
+    "krillin-motion": {
+      "sourceHash": "6506734bddcd91d931a33d4d99716f5cd4302a3adb0ca75c222d32351eff1ad0",
+      "columnCounts": [
+        7,
+        7,
+        7,
+        7
+      ],
+      "splitColumns": []
+    },
+    "krillin-reaction": {
+      "sourceHash": "9eb02cae88fb66dfb0fd52b4d6fbe6ad2c5030a03ade5e4823174b0d4fd055ed",
+      "columnCounts": [
+        11,
+        11,
+        11,
+        11
+      ],
+      "splitColumns": []
+    },
+    "vegeta-combat": {
+      "sourceHash": "ef16a9c6c4faa79e8ce1dfdc1dd48d15407efd7f38e31d114e7484bde170dc71",
+      "columnCounts": [
+        12,
+        12,
+        12,
+        12
+      ],
+      "splitColumns": []
+    },
+    "vegeta-motion": {
+      "sourceHash": "b3f9a7a8bf47938c1fed1ea8623fbf76a60bf4f1280219e1ba63d36ec0dd392c",
+      "columnCounts": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "splitColumns": []
+    },
+    "vegeta-reaction": {
+      "sourceHash": "db67ad9deb0a3bcb6cad9cf86bb7abeb56a122ba8e4a84b8ea5685c0794e7885",
+      "columnCounts": [
+        11,
+        11,
+        11,
+        11
+      ],
+      "splitColumns": []
+    },
+    "signature-saiyans": {
+      "sourceHash": "433d6f60d4090f9f358616361acf06fa9c3bc57cbd8cb90f6b0034471c2db966",
+      "columnCounts": [
+        10,
+        10,
+        11,
+        11
+      ],
+      "splitColumns": [
+        {
+          "column": 0,
+          "edges": [
+            0,
+            159,
+            311,
+            467,
+            617,
+            763,
+            904,
+            1055,
+            1202,
+            1320,
+            1430,
+            1536
+          ]
+        },
+        {
+          "column": 1,
+          "edges": [
+            0,
+            159,
+            311,
+            467,
+            616,
+            762,
+            905,
+            1055,
+            1202,
+            1323,
+            1430,
+            1536
+          ]
+        }
+      ]
+    },
+    "signature-earth": {
+      "sourceHash": "d68666c3699c5865c7776de5b3d8cc74364b6df97ccf852583f1ee2d67262c27",
+      "columnCounts": [
+        7,
+        7,
+        7,
+        7
+      ],
+      "splitColumns": []
+    }
+  },
+  "animationSheets": 98,
+  "staticFormSheets": 20,
+  "frames": 3920
+}

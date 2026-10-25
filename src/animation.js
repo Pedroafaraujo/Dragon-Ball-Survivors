@@ -1,3 +1,6 @@
+import { FRAME_DATA } from "./frame-data.js";
+import { playerFrame, enemyFrame } from "./sprite-layout.js";
+import { enemyArt } from "./animation-assets.js";
 /** Deterministic animation clocks. No DOM, drawing or combat rules. */
 export const CLIPS = Object.freeze({
   idle: {
@@ -9,7 +12,7 @@ export const CLIPS = Object.freeze({
     group: 0,
   },
   walk: {
-    frames: [1, 2, 3],
+    frames: [1, 2, 3, 2],
     duration: 0.48,
     priority: 1,
     loop: true,
@@ -94,6 +97,8 @@ export class Animator {
     this.speed = 0;
     this.formFrom = null;
     this.changedForm = false;
+    this.visualForm = null;
+    this.transformation = null;
   }
   play(
     state,
@@ -138,16 +143,63 @@ export class Animator {
     this.travel +=
       Math.hypot(dx, dy) / (this.stride || (this.motion === "run" ? 64 : 48));
   }
-  update(dt) {
-    if (this.action) {
-      this.action.elapsed += dt;
-      if (
-        this.action.elapsed >= this.action.duration &&
-        this.action.state !== "death"
-      ) {
-        this.action = null;
-        this.formFrom = null;
+  beginTransformation(from, to) {
+    this.visualForm = from;
+    this.formFrom = from;
+    this.changedForm = false;
+    this.transformation = {
+      from,
+      to,
+      swapAt: 0.56,
+      total: 0.86,
+      swapped: false,
+    };
+    this.play("transform", {
+      force: true,
+      duration: 0.86,
+      token: Symbol("transform"),
+    });
+  }
+  transformationView() {
+    if (!this.transformation || this.action?.state !== "transform") return null;
+    const t = this.action.elapsed,
+      m = this.transformation;
+    const progress = Math.max(0, Math.min(1, (t - 0.16) / (0.56 - 0.16)));
+    return {
+      phase:
+        t < 0.16
+          ? "prepare"
+          : !m.swapped
+            ? "charge"
+            : t < 0.66
+              ? "swap"
+              : "recover",
+      aura: progress,
+      flash: m.swapped ? Math.max(0, 1 - Math.abs(t - 0.58) / 0.06) : 0,
+      swapped: m.swapped,
+    };
+  }
+  update(dt, formReady = () => true) {
+    if (!this.action) return;
+    const action = this.action,
+      transition = this.transformation;
+    if (action.state === "transform" && transition) {
+      const next = action.elapsed + dt;
+      if (!transition.swapped && next >= transition.swapAt) {
+        if (!formReady(transition.to)) {
+          action.elapsed = transition.swapAt - 0.00001;
+          return;
+        }
+        transition.swapped = true;
+        this.visualForm = transition.to;
+        this.changedForm = true;
       }
+    }
+    action.elapsed += dt;
+    if (action.elapsed >= action.duration && action.state !== "death") {
+      this.action = null;
+      this.formFrom = null;
+      this.transformation = null;
     }
   }
   sample(action = true) {
@@ -159,6 +211,17 @@ export class Animator {
       : state === "idle"
         ? (this.idleTime / def.duration) % 1
         : this.travel % 1;
+    if (state === "transform" && this.transformation) {
+      const swapped = this.transformation.swapped;
+      return {
+        state,
+        frame: swapped ? 0 : phase < 0.19 ? 0 : 1,
+        direction: a.direction,
+        pack: swapped ? "base" : "reaction",
+        group: swapped ? 0 : 4,
+        phase,
+      };
+    }
     return {
       state,
       frame: a?.signature
@@ -197,6 +260,30 @@ export function animateMotion(entity, oldX, oldY, dt, maxSpeed) {
   animator(entity).motionStep(entity.x - oldX, entity.y - oldY, dt, maxSpeed);
 }
 export function handAnchor(entity, direction, style = "palm") {
+  const sample = entity.anim?.sample();
+  if (sample) {
+    const pose = entity.type
+      ? enemyFrame(enemyArt(entity), sample)
+      : entity.spriteId
+        ? playerFrame(
+            entity.spriteId,
+            entity.anim.visualForm ?? entity.form ?? 0,
+            sample,
+          )
+        : null;
+    const metadata = pose && FRAME_DATA[pose.key]?.[pose.row * 4 + pose.frame];
+    if (metadata) {
+      if (entity.type) {
+        const size =
+          entity.type === "freeza" ? 126 : Math.max(67, entity.r * 4.6);
+        return {
+          x: entity.x + ((metadata[4] - 48) * size) / 96,
+          y: entity.y + entity.r - size * 0.875 + (metadata[5] * size) / 96,
+        };
+      }
+      return { x: entity.x + metadata[4] - 48, y: entity.y + metadata[5] - 66 };
+    }
+  }
   const offsets = {
     south: [10, -9],
     north: [-9, -20],

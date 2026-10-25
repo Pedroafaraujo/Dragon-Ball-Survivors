@@ -10,6 +10,7 @@ import { draw } from "./render.js";
 import { UI } from "./ui.js";
 import { Input } from "./input.js";
 import { animator } from "./animation.js";
+import { formSheetsReady } from "./sprites.js";
 import { playerMotion } from "./motion.js";
 export class Game {
   constructor() {
@@ -91,6 +92,7 @@ export class Game {
       xp: 0,
       form: 0,
       invuln: 1,
+      spriteId: c.id,
       vx: 0,
       vy: 0,
       kx: 0,
@@ -153,21 +155,7 @@ export class Game {
     this.feedbackCooldown = Math.max(0, this.feedbackCooldown - dt);
     if (this.player) {
       const a = animator(this.player);
-      a.update(dt);
-      if (
-        a.action?.state === "transform" &&
-        a.action.elapsed >= a.action.duration * 0.5 &&
-        !a.changedForm
-      ) {
-        a.changedForm = true;
-        this.flash = 0.45;
-        this.effects.burst(
-          this.player.x,
-          this.player.y,
-          "#d8faff",
-          this.save.reduced ? 10 : 32,
-        );
-      }
+      a.update(dt, (form) => formSheetsReady(this.character.id, form));
     }
     for (const e of this.enemies) if (e.hp > 0) animator(e).update(dt);
     for (const e of this.corpses) {
@@ -197,19 +185,18 @@ export class Game {
     this.messageTime -= dt;
     p.invuln = Math.max(0, p.invuln - dt);
     p.hp = Math.min(p.maxHp, p.hp + p.regen * dt);
+    this.tickVisuals(dt);
     const v = this.input.vector();
     playerMotion(this, v, dt);
     updateEnemies(this, dt);
     if (p.hp <= 0) {
       p.hp = 0;
       this.finish(false);
-      this.tickVisuals(dt);
       this.ui.hud();
       return;
     }
     attack(this, dt);
     if (this.state !== State.PLAY) {
-      this.tickVisuals(dt);
       this.ui.hud();
       return;
     }
@@ -232,7 +219,6 @@ export class Game {
 
     this.rings = this.rings.filter((r) => (r.t -= dt) > 0);
     this.effects.update(dt);
-    this.tickVisuals(dt);
     this.checkLevel();
     this.ui.hud();
   }
