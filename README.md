@@ -31,6 +31,8 @@ Abre `http://localhost:8000`. `npm start` executa o mesmo servidor estático. N�
 
 A técnica secundária desbloqueia no nível 3 e a final no nível 8. Personagens, atributos base, melhorias, limiares de XP, marcos de formas, arena, dano e cadências base das técnicas mantêm os valores anteriores. Colisões com terreno, controlos e formato dos recordes foram preservados. O contacto dos inimigos agora inclui a antecipação pedida; knockback e separação também alteram deliberadamente a movimentação e o momento dos impactos. Estes tempos precisam de balanceamento prolongado em partidas completas.
 
+A revisão atual e a evidência visual estão em [docs/combat-choreography.md](docs/combat-choreography.md).
+
 ## Animações e movimento
 
 `src/animation.js` contém uma máquina reutilizável com **idle, walk, run, attack, charge, cast, hurt, knockback, transform e death**. Os clips têm frames, duração, prioridade, direção e transições. Eventos repetidos com o mesmo token não reiniciam o clip; morte não pode ser interrompida por um ataque de prioridade inferior.
@@ -38,6 +40,7 @@ A técnica secundária desbloqueia no nível 3 e a final no nível 8. Personagen
 - Marcha/corrida usam **distância realmente percorrida**, incluindo colisões. Empurrar uma parede não faz os pés continuarem a andar.
 - Aceleração vetorial alcança a velocidade existente em cerca de 100 ms; a travagem demora menos de 100 ms. Diagonais não aumentam a velocidade máxima.
 - Mudanças de direção preservam a fase do passo e usam histerese para evitar oscilações nos movimentos diagonais.
+- A transição walk/run tem limiares diferentes para entrar e sair, evitando alternância de folhas com pequenas oscilações de velocidade.
 - O ponto de apoio dos sprites normalizados é o pixel 84 da célula; a sombra usa o mesmo chão.
 - Ataques em movimento usam uma pose completa de ataque. Não se misturam pernas e troncos de animações incompatíveis; o movimento físico continua permitido.
 - Física e animação avançam em passos fixos de 1/60 s, com delta time e interpolação visual de posições. Pausa e perda de foco suspendem o combate.
@@ -52,7 +55,7 @@ A separação usa uma grelha espacial e impulsos limitados; não muda os obstác
 
 ## Técnicas com fases reais
 
-`src/weapons.js` define preparação, carregamento, lançamento, impacto e recuperação para cada técnica. Cooldowns e valores de dano/área anteriores foram conservados; o dano deixa de acontecer antes da preparação.
+`src/weapons.js` conserva os temporizadores e valores existentes. `src/combat-animation.js` seleciona uma pose completa por fase: preparação, carregamento, lançamento, impacto e recuperação. Rajadas menores não reiniciam técnicas maiores; feixes ativos retêm a pose de emissão e reações a dano retomam o ataque na fase correta. Técnicas simultâneas mantêm dano e cooldown independentes, partilhando uma única pose corporal dominante.
 
 - **Kamehameha:** carga de mãos, extensão progressiva de feixe azul e recuperação.
 - **Galick Gun:** carga violeta mais curta e feixe próprio.
@@ -66,7 +69,7 @@ A separação usa uma grelha espacial e impulsos limitados; não muda os obstác
 - **Taiyoken:** preparação junto do rosto, flash em área e o abrandamento anterior.
 - Braço elástico e rajada de Buu também usam a linha temporal e poses de ataque.
 
-Feixes nascem nas âncoras das mãos e acompanham a posição do emissor. A frente animada do feixe determina quando os alvos são atingidos; um conjunto de alvos impede dano repetido no mesmo lançamento. Discos/projéteis usam colisão varrida para não atravessarem inimigos a FPS baixos. Esferas só aplicam dano de área quando chegam ao destino. Explosões têm expansão e dissipação. Impactos fortes produzem um hit stop limitado a 32 ms, reação, números de dano e shake moderado, respeitando a definição de câmara.
+Feixes nascem nas âncoras das mãos e acompanham a posição do emissor. A frente animada do feixe determina quando os alvos são atingidos; um conjunto de alvos impede dano repetido no mesmo lançamento. Discos/projéteis usam colisão varrida para não atravessarem inimigos a FPS baixos. Esferas só aplicam dano de área quando chegam ao destino. `assets/packed/effects/combat-fx.png` contém 144 frames originais de efeitos (18 estilos × oito desenhos), gerados localmente sem serviços externos. Feixes usam texturas animadas com núcleo e contorno; esferas, discos e explosões têm desenhos próprios. Impactos usam um pool de 20 elementos. Taiyoken dissipa em 240 ms sem ocultar a arena durante a recuperação. Impactos fortes produzem um hit stop limitado a 32 ms, reação, números de dano e shake moderado, respeitando a definição de câmara.
 
 Transformações interrompem brevemente movimento e novos ataques: preparação, aura crescente, flash breve, troca única pelo corpo completo e recuperação. A troca aguarda os assets da forma alvo; projéteis já lançados continuam a existir. Os bónus de progressão mantêm os marcos anteriores. Auras dourada, God, Blue, Ultra Instinct, Ultra Ego e Beast têm silhuetas e frames diferentes, além de ritmos próprios.
 
@@ -94,6 +97,7 @@ npm install --no-save --package-lock=false playwright
 CHROMIUM_PATH=/usr/bin/chromium node tools/browser-smoke.cjs
 CHROMIUM_PATH=/usr/bin/chromium node tools/animation-smoke.cjs
 CHROMIUM_PATH=/usr/bin/chromium node tools/verify-sprite-fix.cjs
+CHROMIUM_PATH=/usr/bin/chromium node tools/combat-sequence.cjs
 ```
 
 `GAME_URL` permite outro endereço de servidor. O teste de animação verifica 960 amostras de poses de jogadores/inimigos, 14 linhas temporais de técnicas em movimento, transformação, duas fases de Freeza e um gesto tátil real em viewport Android através do protocolo do Chromium. O teste de fluxo verifica pausa, níveis, vitória/derrota e persistência. `?test` expõe `window.__game` para instrumentação local; não altera as regras normais.
@@ -101,7 +105,7 @@ CHROMIUM_PATH=/usr/bin/chromium node tools/verify-sprite-fix.cjs
 ## Assets e otimização
 
 - `assets/manifest.json`: as 23 folhas de base existentes.
-- `assets/animation-manifest.json`: 99 folhas adicionais de animação/assinaturas/auras, com corpos completos por forma e fallbacks explicitamente identificados.
+- `assets/animation-manifest.json`: 100 folhas adicionais de animação/assinaturas/auras, com corpos completos por forma e fallbacks explicitamente identificados.
 - `assets/source/`: todos os mestres PNG originais; não são descarregados pelo jogo normal.
 - `assets/packed/`: texturas normalizadas, com células RGBA de 96 × 96 e quatro colunas. A execução modular carrega as formas conforme necessário; um teste mantém o total abaixo de 16 MiB.
 - `assets/animation-layouts.json`: recortes corrigidos para os mestres com espaçamento/linhas irregulares.
@@ -115,6 +119,7 @@ Os PNG prontos estão incluídos; não é necessário fazer build para jogar ou 
 ```sh
 python3 -m pip install -r tools/requirements-assets.txt
 python3 tools/repair-atlases.py
+python3 tools/draw-combat-fx.py
 python3 tools/make-repair-previews.py
 python3 tools/export-standalone.py Dragon-Ball-Survivors.html
 ```
@@ -129,4 +134,4 @@ O repositório pode ser descarregado pelo botão **Code → Download ZIP**. Para
 
 A correção reutiliza a arte original existente, sem chamadas a APIs. Não foram desenhadas novas poses para todas as transformações: 45 folhas de ação/reação/assinatura usam a guarda completa da forma; 15 folhas de locomoção transformada reutilizam os passos completos existentes. Não se anuncia corrida ou ataque exclusivo onde não existe arte adequada. Buu, Burter e Jeice usam os passos frontais completos existentes onde o mestre não tinha corrida frontal. Algumas vistas laterais são espelhadas; não há oito direções.
 
-Há 23 testes automáticos, incluindo a integridade dos 3.600 frames de animação e 320 frames das formas completas. A validação visual e capturas estão em [docs/animation-validation.md](docs/animation-validation.md), e as causas em [docs/animation-diagnosis.md](docs/animation-diagnosis.md). Foram testados Chromium desktop e viewport Android com toque simulado; não houve teste num telemóvel físico nem partida manual completa de 20 minutos. A qualidade das poses originais ainda beneficia de revisão artística manual.
+Há 33 testes automáticos, incluindo a integridade dos 3.600 frames de animação e 320 frames das formas completas. A validação visual e capturas estão em [docs/animation-validation.md](docs/animation-validation.md), e as causas em [docs/animation-diagnosis.md](docs/animation-diagnosis.md). Foram testados Chromium desktop e viewport Android com toque simulado; não houve teste num telemóvel físico nem partida manual completa de 20 minutos. A qualidade das poses originais ainda beneficia de revisão artística manual.

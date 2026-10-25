@@ -73,11 +73,12 @@ export function updateEnemies(g, dt) {
     const d = distance(e, g.player) || 1,
       near = d < e.r + g.player.r + 14;
     if (!e.contact && near) {
-      e.contact = { time: 0, hit: false };
+      e.contact = { time: 0, hit: false, token: Symbol("contact") };
       anim.play("attack", {
         direction: facing(g.player.x - e.x, g.player.y - e.y, anim.direction),
         duration: e.r > 20 ? 0.62 : 0.46,
-        token: Symbol("contact"),
+        token: e.contact.token,
+        contactTiming: { windup: e.r > 20 ? 0.24 : 0.16, active: 0.1 },
       });
     }
     const slow = (g.stun > 0 ? 0.08 : 1) * (e.contact?.time < 0.2 ? 0.55 : 1);
@@ -105,6 +106,7 @@ export function updateEnemies(g, dt) {
     if (e.contact) {
       const previous = e.contact.time;
       e.contact.time += dt;
+      if (anim.action?.token === e.contact.token) anim.action.elapsed = e.contact.time;
       const windup = e.r > 20 ? 0.24 : 0.16;
       if (previous < windup && e.contact.time >= windup && !e.contact.hit) {
         e.contact.hit = true;
@@ -129,10 +131,12 @@ export function updateEnemies(g, dt) {
       }
       e.attack -= dt;
       if (e.attack <= 0 && !e.bossCast) {
-        e.bossCast = { time: 0, released: false };
+        e.bossCast = { time: 0, released: false,
+          direction: facing(g.player.x - e.x, g.player.y - e.y, anim.direction) };
         anim.play("charge", {
-          direction: facing(g.player.x - e.x, g.player.y - e.y),
+          direction: e.bossCast.direction,
           duration: 0.4,
+          contactTiming: { windup: 0.4, active: 0.1 },
           priority: 5,
           token: Symbol("boss-charge"),
         });
@@ -141,13 +145,15 @@ export function updateEnemies(g, dt) {
         e.bossCast.time += dt;
         if (e.bossCast.time >= 0.34 && !e.bossCast.released) {
           e.bossCast.released = true;
-          const count = e.phase === 2 ? 16 : 10,
-            origin = handAnchor(e, anim.direction);
+          const count = e.phase === 2 ? 16 : 10;
           anim.play("cast", {
+            direction: e.bossCast.direction,
             duration: 0.3,
             priority: 5,
             token: Symbol("boss-cast"),
+            contactTiming: { windup: 0, active: 0.16 },
           });
+          const origin = handAnchor(e, anim.action?.direction || anim.direction);
           for (let i = 0; i < count; i++) {
             const b = projectilePool(g, true).acquire();
             if (!b) break;

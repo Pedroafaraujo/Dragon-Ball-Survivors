@@ -108,6 +108,7 @@ export function impact(
     Math.min(160, (entity.ky || 0) + ((entity.y - y) / d) * force),
   );
   a.play(strong ? "knockback" : "hurt", { token: Symbol("hit") });
+  g.effects?.strike?.(entity.x, entity.y - (entity.r || 14), strong);
   if (g.feedback) {
     g.feedback.push({
       x: entity.x,

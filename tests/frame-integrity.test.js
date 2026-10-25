@@ -33,11 +33,12 @@ test("all 3600 animation frames contain one complete connected actor, a safe cel
           data.slice(0, 4),
           `${name}: stale bounds`,
         );
-        const handAlpha =
-          image.pixels[
-            ((row * 96 + data[5]) * image.width + col * 96 + data[4]) * 4 + 3
+        for (const anchor of [4,8,10]) {
+          const handAlpha = image.pixels[
+            ((row * 96 + data[anchor + 1]) * image.width + col * 96 + data[anchor]) * 4 + 3
           ];
-        assert.ok(handAlpha >= 144, `${name}: hand marker outside body`);
+          assert.ok(handAlpha >= 144, `${name}: hand marker ${anchor} outside body`);
+        }
         count++;
       }
   }

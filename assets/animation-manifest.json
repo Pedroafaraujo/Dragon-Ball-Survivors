@@ -12083,6 +12083,36 @@
       "cell": 96,
       "frames": 32,
       "runtime": "packed/effects/auras.png"
+    },
+    {
+      "key": "combat-fx",
+      "file": "effects/combat-fx.png",
+      "runtime": "packed/effects/combat-fx.png",
+      "source": "../tools/draw-combat-fx.py",
+      "rows": 36,
+      "cell": 96,
+      "frames": 144,
+      "artStatus": "effect",
+      "styles": [
+        "beam-blue",
+        "beam-violet",
+        "beam-gold",
+        "helix",
+        "ki",
+        "disc",
+        "genki",
+        "bang",
+        "planet",
+        "charge",
+        "explosion",
+        "impact",
+        "elastic",
+        "flash",
+        "explosion-blue",
+        "explosion-pink",
+        "ki-blue",
+        "ki-pink"
+      ]
     }
   ]
 }

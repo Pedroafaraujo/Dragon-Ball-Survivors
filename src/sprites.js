@@ -332,7 +332,7 @@ export function auraEffect(ctx, form, frame, x, y, width, height) {
       ? 1
       : form === "Blue"
         ? 2
-        : form === "Ultra Instinct"
+        : (form === "Ultra Instinct" || form === "Ultimate")
           ? 3
           : form === "Ultra Ego"
             ? 4
@@ -378,6 +378,7 @@ export const ready = Promise.all([
   ...Object.keys(FORM_FILES).map((id) => prepareAnimation(id, 0)),
   prepareEnemy("saibaman"),
   loadSheet("auras", "effects/auras.png", 8, 80, false),
+  loadSheet("combat-fx", "effects/combat-fx.png", 36, 80, false),
 ])
   .then(() => {
     assetStatus.ready = true;

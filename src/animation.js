@@ -111,6 +111,7 @@ export class Animator {
       signature = false,
       release = null,
       hand = "palm",
+      contactTiming = null,
     } = {},
   ) {
     if (!CLIPS[state]) throw Error(`Unknown animation ${state}`);
@@ -127,6 +128,7 @@ export class Animator {
       signature,
       release,
       hand,
+      contactTiming,
     };
     return true;
   }
@@ -139,7 +141,8 @@ export class Animator {
       return;
     }
     this.direction = facing(dx, dy, this.direction);
-    this.motion = this.speed > maxSpeed * 0.78 ? "run" : "walk";
+    // Hysteresis prevents walk/run sheets alternating around the speed threshold.
+    this.motion = this.speed > maxSpeed * (this.motion === "run" ? 0.66 : 0.82) ? "run" : "walk";
     this.travel +=
       Math.hypot(dx, dy) / (this.stride || (this.motion === "run" ? 64 : 48));
   }
@@ -181,6 +184,8 @@ export class Animator {
   }
   update(dt, formReady = () => true) {
     if (!this.action) return;
+    // Combat poses are sampled from the weapon clock, including after a hit reaction.
+    if (this.action.source === "combat") return;
     const action = this.action,
       transition = this.transformation;
     if (action.state === "transform" && transition) {
@@ -211,6 +216,14 @@ export class Animator {
       : state === "idle"
         ? (this.idleTime / def.duration) % 1
         : this.travel % 1;
+    if (a?.combatSample) return a.combatSample;
+    if (a?.contactTiming) {
+      const { windup, active } = a.contactTiming;
+      return {
+        state, direction: a.direction, pack: "combat", group: 0, phase,
+        frame: a.elapsed < windup * 0.35 ? 0 : a.elapsed < windup ? 1 : a.elapsed < windup + active ? 2 : 3,
+      };
+    }
     if (state === "transform" && this.transformation) {
       const swapped = this.transformation.swapped;
       return {
@@ -273,15 +286,17 @@ export function handAnchor(entity, direction, style = "palm") {
         : null;
     const metadata = pose && FRAME_DATA[pose.key]?.[pose.row * 4 + pose.frame];
     if (metadata) {
+      const anchor = style === "forehead" && metadata.length >= 10 ? 8 : style === "overhead" && metadata.length >= 12 ? 10 : 4;
+      const hx = metadata[anchor], hy = metadata[anchor + 1];
       if (entity.type) {
         const size =
           entity.type === "freeza" ? 126 : Math.max(67, entity.r * 4.6);
         return {
-          x: entity.x + ((metadata[4] - 48) * size) / 96,
-          y: entity.y + entity.r - size * 0.875 + (metadata[5] * size) / 96,
+          x: entity.x + ((hx - 48) * size) / 96,
+          y: entity.y + entity.r - size * 0.875 + (hy * size) / 96,
         };
       }
-      return { x: entity.x + metadata[4] - 48, y: entity.y + metadata[5] - 66 };
+      return { x: entity.x + hx - 48, y: entity.y + hy - 66 };
     }
   }
   const offsets = {

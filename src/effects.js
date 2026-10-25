@@ -4,6 +4,14 @@ export class Effects {
   constructor() {
     this.items = [];
     this.pool = new Pool(() => ({}), limits.particles);
+    this.impacts = [];
+    this.impactPool = new Pool(() => ({}), 20);
+  }
+  strike(x, y, strong = false) {
+    const item = this.impactPool.acquire();
+    if (!item) return;
+    Object.assign(item, { x, y, age: 0, life: strong ? 0.24 : 0.16, strong });
+    this.impacts.push(item);
   }
   burst(x, y, color, count = 10) {
     for (let i = 0; i < count && this.items.length < limits.particles; i++) {
@@ -23,6 +31,13 @@ export class Effects {
     }
   }
   update(dt) {
+    let count = 0;
+    for (const item of this.impacts) {
+      item.age += dt;
+      if (item.age >= item.life) this.impactPool.release(item);
+      else this.impacts[count++] = item;
+    }
+    this.impacts.length = count;
     let write = 0;
     for (const p of this.items) {
       p.t -= dt;

@@ -1,6 +1,7 @@
 import { distance } from "./collisions.js";
 import { hurt } from "./enemies.js";
 import { animator, facing, handAnchor } from "./animation.js";
+import { presentCasts, castPhase } from "./combat-animation.js";
 import { projectilePool, reapProjectiles } from "./pool.js";
 export const TECHNIQUES = Object.freeze({
   ki: {
@@ -202,15 +203,7 @@ export function scheduleCast(g, key, target, channel = 0) {
     token: Symbol(key),
   };
   (g.casts || (g.casts = [])).push(cast);
-  a.play(channel === 0 ? "attack" : "charge", {
-    direction,
-    duration: def.windup + def.charge,
-    priority: 3 + channel,
-    token: cast.token,
-    release: false,
-    signature,
-    hand: def.hand,
-  });
+  presentCasts(g.player, g.casts);
   return cast;
 }
 function spawnProjectile(
@@ -257,17 +250,7 @@ function launch(g, cast) {
   const { def, key, direction, target } = cast,
     p = g.player,
     active = animator(p).action,
-    originStyle =
-      active && active.priority > 4 + cast.channel ? active.hand : def.hand;
-  animator(p).play(cast.channel === 0 ? "attack" : "cast", {
-    direction,
-    duration: def.active + def.recovery,
-    priority: 4 + cast.channel,
-    token: Symbol(key + "-release"),
-    signature: cast.signature,
-    release: true,
-    hand: def.hand,
-  });
+    originStyle = active?.hand || "palm";
   const origin = handAnchor(p, direction, originStyle),
     angle = Math.atan2(target.y - origin.y, target.x - origin.x);
   cast.origin = origin;
@@ -355,21 +338,16 @@ function launch(g, cast) {
 }
 export function advanceCasts(g, dt, { suspendCasting = false } = {}) {
   const casts = g.casts || (g.casts = []);
+  if (!suspendCasting) {
+    for (const cast of casts) {
+      cast.elapsed += dt;
+      cast.phase = castPhase(cast).name;
+    }
+    presentCasts(g.player, casts);
+  }
   for (const cast of casts) {
     if (suspendCasting) continue;
-    const { def } = cast;
-    cast.elapsed += dt;
-    const release = def.windup + def.charge;
-    cast.phase =
-      cast.elapsed < def.windup
-        ? "preparation"
-        : cast.elapsed < release
-          ? "charge"
-          : cast.elapsed < release + def.active * 0.3
-            ? "launch"
-            : cast.elapsed < release + def.active
-              ? "impact"
-              : "recovery";
+    const release = cast.def.windup + cast.def.charge;
     if (!cast.released && cast.elapsed >= release) {
       cast.released = true;
       launch(g, cast);
@@ -379,6 +357,7 @@ export function advanceCasts(g, dt, { suspendCasting = false } = {}) {
     (c) =>
       c.elapsed < c.def.windup + c.def.charge + c.def.active + c.def.recovery,
   );
+  if (!suspendCasting) presentCasts(g.player, g.casts);
   for (const l of g.lines) {
     const origin = handAnchor(g.player, l.direction, l.hand);
     l.x = origin.x;

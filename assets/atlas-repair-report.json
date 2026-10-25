@@ -318,7 +318,8 @@
         12,
         12
       ],
-      "splitColumns": []
+      "splitColumns": [],
+      "eastPoseCorrection": "complete west rows mirrored; discarded back-facing east cells"
     },
     "gohan-motion": {
       "sourceHash": "153c8f470967c626bfa009cea9eedd9650ff78fc870842c896b544fb3f72f3a1",
@@ -396,7 +397,8 @@
         12,
         12
       ],
-      "splitColumns": []
+      "splitColumns": [],
+      "eastPoseCorrection": "complete west rows mirrored; discarded back-facing east cells"
     },
     "krillin-motion": {
       "sourceHash": "6506734bddcd91d931a33d4d99716f5cd4302a3adb0ca75c222d32351eff1ad0",
@@ -491,6 +493,11 @@
             1536
           ]
         }
+      ],
+      "signatureCorrections": [
+        "goku: full-body directional release and guard recovery",
+        "vegeta: full-body directional release and guard recovery",
+        "gohan: full-body directional release and guard recovery"
       ]
     },
     "signature-earth": {
@@ -501,7 +508,14 @@
         7,
         7
       ],
-      "splitColumns": []
+      "splitColumns": [],
+      "signatureCorrections": [
+        "buu: full-body directional release and guard recovery",
+        "krillin: full-body directional release and guard recovery"
+      ]
+    },
+    "beast-aura": {
+      "correction": "removed disconnected purple tails from the preceding row; retained the full main pink/white aura in four cells"
     }
   },
   "animationSheets": 98,

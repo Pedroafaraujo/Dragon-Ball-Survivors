@@ -1,3 +1,4 @@
+import { combatSprite, energyStyle, drawCombatBeam } from "./combat-fx.js";
 import { appearance } from "./transformations.js";
 import {
   assetStatus,
@@ -6,7 +7,6 @@ import {
   effect,
   drawEnemySprite,
   auraEffect,
-  beamEffect,
 } from "./sprites.js";
 import { renderPosition, handAnchor } from "./animation.js";
 
@@ -212,75 +212,13 @@ function enemy(ctx, e, time, alpha = 1) {
   }
 }
 
-function kiBeam(ctx, l, time, offset = { x: 0, y: 0 }) {
-  const phase = Math.max(0, Math.min(1, (l.life - l.t) / l.life)),
-    length = l.length * Math.min(1, phase / 0.32),
-    angle = l.angle;
-  const envelope = Math.min(1, (phase + 0.05) * 8, (1 - phase) * 8),
-    width = Math.max(2, Math.min(84, l.width) * envelope);
-  ctx.save();
-  ctx.translate(Math.round(l.x + offset.x), Math.round(l.y + offset.y));
-  ctx.rotate(angle);
-  ctx.globalAlpha = 0.85;
-  if (l.kind === "elastic") {
-    ctx.fillStyle = "#a94e87";
-    ctx.fillRect(0, -width * 0.5, length, width);
-    ctx.fillStyle = "#f1a4c8";
-    ctx.fillRect(0, -width * 0.3, length, width * 0.6);
-    effect(ctx, 0, Math.floor(time * 12) % 4, length, 0, 26, 20, "#f1a4c8");
-  } else {
-    ctx.fillStyle = l.color;
-    ctx.globalAlpha = 0.24;
-    ctx.fillRect(0, -width * 0.85, length, width * 1.7);
-    ctx.globalAlpha = 0.95;
-    ctx.fillRect(0, -width * 0.5, length, width);
-    ctx.fillStyle = "#edfaff";
-    ctx.fillRect(
-      0,
-      -Math.max(1, width * 0.19),
-      length,
-      Math.max(2, width * 0.38),
-    );
-    const step = l.kind === "helix" ? 12 : 22,
-      offset = (time * 180) % step;
-    for (let x = offset; x < length; x += step) {
-      const y = Math.sin(x * 0.09 - time * 24) * width * 0.5;
-      ctx.fillStyle = l.kind === "helix" ? "#ffdb7e" : "#c8ffff";
-      ctx.fillRect(Math.round(x), Math.round(y) - 2, 5, 4);
-      if (l.kind === "helix")
-        ctx.fillRect(Math.round(x), Math.round(-y) - 1, 4, 3);
-    }
-    if (l.key === "kamehameha" || l.key === "cannon")
-      beamEffect(
-        ctx,
-        l.kind === "helix",
-        Math.floor(time * 14) % 4,
-        length,
-        0,
-        Math.max(32, width * 2.2),
-        Math.max(24, width * 1.7),
-      );
-    else
-      effect(
-        ctx,
-        0,
-        Math.floor(time * 14) % 4,
-        length,
-        0,
-        Math.max(20, width * 2),
-        Math.max(20, width * 1.8),
-        l.color,
-      );
-  }
-  ctx.restore();
-}
 function castEffects(g, alpha = 1) {
   const ctx = g.ctx,
     pp = renderPosition(g.player, alpha);
   for (const cast of g.casts || []) {
     if (
       cast.released ||
-      (cast.channel === 0 && (g.player.anim?.action?.priority || 0) > 4)
+      g.player.anim?.action?.token !== cast.token
     )
       continue;
     const d = cast.def,
@@ -297,16 +235,8 @@ function castEffects(g, alpha = 1) {
           ? 28
           : 14) +
       progress * (cast.channel === 2 ? 55 : 25);
-    effect(
-      ctx,
-      cast.key === "kienzan" || cast.key === "discs" ? 1 : 0,
-      Math.floor(cast.elapsed * 12) % 4,
-      hand.x,
-      hand.y,
-      size,
-      cast.key === "kienzan" || cast.key === "discs" ? size * 0.45 : size,
-      d.color,
-    );
+    combatSprite(ctx, energyStyle(cast.key), Math.floor(cast.elapsed * 18) % 8,
+      hand.x, hand.y, size, ["kienzan", "discs"].includes(cast.key) ? size * 0.55 : size);
     if (cast.channel > 0 && !g.save.reduced) {
       ctx.fillStyle = d.color;
       for (let i = 0; i < 6; i++) {
@@ -324,16 +254,8 @@ function castEffects(g, alpha = 1) {
   for (const orb of g.orbs || []) {
     const size = orb.key === "bang" ? 36 : orb.key === "genki" ? 76 : 90;
     const position = renderPosition(orb, alpha);
-    effect(
-      ctx,
-      0,
-      Math.floor(orb.age * 12) % 4,
-      position.x,
-      position.y,
-      size,
-      size,
-      orb.color,
-    );
+    combatSprite(ctx, energyStyle(orb.key), Math.floor(orb.age * 18) % 8,
+      position.x, position.y, size, size);
   }
 }
 
@@ -398,16 +320,8 @@ export function draw(g, alpha = 1) {
   for (const b of g.bullets) {
     const size = b.disc ? 42 : 30,
       position = renderPosition(b, alpha);
-    effect(
-      ctx,
-      b.disc ? 1 : 0,
-      Math.floor(g.time * 12) % 4,
-      position.x,
-      position.y,
-      size,
-      b.disc ? 24 : size,
-      b.color,
-    );
+    combatSprite(ctx, b.disc ? "disc" : b.technique === "barrage" ? "ki-pink" : "ki", Math.floor(b.age * 20) % 8,
+      position.x, position.y, size, b.disc ? 26 : size);
   }
   for (const b of g.hostile) {
     const position = renderPosition(b, alpha);
@@ -423,22 +337,20 @@ export function draw(g, alpha = 1) {
     );
   }
   for (const l of g.lines.slice(-8))
-    kiBeam(ctx, l, g.time, { x: pos.x - p.x, y: pos.y - p.y });
+    drawCombatBeam(ctx, l, { x: pos.x - p.x, y: pos.y - p.y }, g.save.reduced);
   for (const r of g.rings) {
+    const age = r.life - r.t;
+    if (r.key === "taiyoken" && age > 0.24) continue;
     ctx.save();
-    ctx.globalAlpha = Math.min(1, r.t * 3);
-    effect(
-      ctx,
-      2,
-      Math.min(3, Math.floor(((r.life - r.t) / r.life) * 4)),
-      r.x,
-      r.y,
-      Math.min(640, r.r * 2),
-      Math.min(640, r.r * 2),
-      r.color,
-    );
+    ctx.globalAlpha = r.key === "taiyoken" ? Math.max(0, 0.55 * (1 - age / 0.24)) : Math.min(1, r.t * 3);
+    combatSprite(ctx, r.key === "taiyoken" ? "flash" : r.key === "planet" ? "explosion-pink" : ["genki", "bang"].includes(r.key) ? "explosion-blue" : "explosion",
+      Math.min(7, Math.floor(age / (r.key === "taiyoken" ? 0.24 : r.life) * 8)),
+      r.x, r.y, Math.min(r.key === "taiyoken" ? 240 : 400, r.r * 2), Math.min(r.key === "taiyoken" ? 240 : 400, r.r * 2));
     ctx.restore();
   }
+  for (const hit of g.effects.impacts || [])
+    combatSprite(ctx, "impact", Math.min(7, Math.floor(hit.age / hit.life * 8)),
+      hit.x, hit.y, hit.strong ? 56 : 30);
   g.effects.draw(ctx);
   ctx.textAlign = "center";
   ctx.font = "bold 11px monospace";

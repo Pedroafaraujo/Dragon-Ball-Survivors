@@ -26,10 +26,14 @@ A folha de inimigos tem linhas: Saibaman, soldado, Guldo, Recoome, Burter, Jeice
 
 ## Reprodução e correção dos atlas
 
-Executar `python3 -m pip install -r tools/requirements-assets.txt` e `python3 tools/repair-atlases.py`. O jogo publicado continua sem dependências de instalação. As fontes originais ficam intactas; os hashes e a proveniência de cada extração estão em `atlas-repair-report.json`.
+Executar `python3 -m pip install -r tools/requirements-assets.txt` e `python3 tools/repair-atlases.py`, seguido de `python3 tools/draw-combat-fx.py`. O jogo publicado continua sem dependências de instalação. As fontes originais ficam intactas; os hashes e a proveniência de cada extração estão em `atlas-repair-report.json`.
 
 Os mestres de `source/animation/` têm espaçamento irregular. O reparador identifica atores completos por componentes de alpha; os raros atores encostados são separados com referências das restantes colunas. Alinha o eixo do corpo e o chão a 84/96. Não recorta pela divisão uniforme da largura, não combina troncos/pernas e não compõe cabelo.
 
-`animation-manifest.json` descreve 99 folhas: 98 de atores e uma de auras. O campo `artStatus` distingue 38 folhas de poses base/inimigos, 15 de locomoção de formas completas e 45 de guarda completa provisória para ações sem arte própria. A guarda não é apresentada como animação de combate exclusiva. Cada transformação preserva o seu modelo completo original. Buu/Burter/Jeice reutilizam os passos frontais existentes onde faltava corrida frontal; Ginyu tem as linhas laterais corrigidas.
+`animation-manifest.json` descreve 100 folhas: 98 de atores, uma de auras e uma de efeitos de combate. O campo `artStatus` distingue 38 folhas de poses base/inimigos, 15 de locomoção de formas completas e 45 de guarda completa provisória para ações sem arte própria. A guarda não é apresentada como animação de combate exclusiva. Cada transformação preserva o seu modelo completo original. Buu/Burter/Jeice reutilizam os passos frontais existentes onde faltava corrida frontal; Ginyu tem as linhas laterais corrigidas.
 
 `../src/frame-data.js` guarda bounds, chão e mãos por frame. Os testes verificam 3.600 células de animação e 320 de formas: um ator conectado, margem livre e nenhum pixel abaixo do chão. Isso detecta os fragmentos anteriores, mas não substitui revisão artística. As pré-visualizações antes/depois e o vídeo real do navegador estão em `../docs/previews/`; `../tools/frame-review.html` permite inspecionar todas as células individualmente.
+
+## Atlas de efeitos de combate
+
+`packed/effects/combat-fx.png` é desenhado por `tools/draw-combat-fx.py` com Pillow, sem IA remota, APIs ou downloads. Tem 144 frames (18 estilos × oito), a 48 pixels lógicos exportados em 96×96 por nearest-neighbor. Inclui texturas de feixe azul/violeta/dourado, hélice, esferas distintas, discos, braço elástico, flash, impactos e explosões com variantes azul e magenta. Cada estilo tem oito desenhos diferentes; isso é verificado nos testes. Não são novas animações de corpos. As correções de poses laterais e recuperação reutilizam frames completos do mesmo personagem, nunca membros sobrepostos.

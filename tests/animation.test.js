@@ -179,14 +179,14 @@ test("authored animation atlases cover all five players, forms and nine enemy va
   const m = JSON.parse(
     readFileSync(new URL("../assets/animation-manifest.json", import.meta.url)),
   );
-  assert.equal(m.sheets.length, 99);
+  assert.equal(m.sheets.length, 100);
   for (const sheet of m.sheets) {
     const png = readFileSync(
       new URL("../assets/" + sheet.runtime, import.meta.url),
     );
     assert.equal(png.readUInt32BE(16), 384);
     assert.equal(png.readUInt32BE(20), sheet.rows * 96);
-    if (sheet.key !== "auras")
+    if (!["auras", "combat-fx"].includes(sheet.key))
       assert.equal(sheet.anchors.length, sheet.rows * 4);
     if (sheet.anchors)
       for (const anchor of sheet.anchors) assert.equal(anchor.ground, 84);

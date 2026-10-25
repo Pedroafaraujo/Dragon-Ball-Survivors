@@ -114,12 +114,13 @@ def full_variant(image,id,suffix,direction,frame,kind,row):
     rgba[labels!=areas.argmax()]=0;rgba[rgba[:,:,3]>=144,3]=255
     return Image.fromarray(rgba)
 
-def hand_metadata(image,id,kind,row,col):
+def hand_metadata(image,id,kind,row,col,style_override=None):
     data=np.asarray(image);r,g,b,a=[data[:,:,i].astype(float) for i in range(4)];yy,xx=np.indices(a.shape)
     if id=='buu':skin=(r>g*1.25)&(b>g*1.05)&(a>0)
     elif id=='vegeta':skin=(np.minimum.reduce([r,g,b])>150)&(np.maximum.reduce([r,g,b])-np.minimum.reduce([r,g,b])<60)&(a>0)
     else:skin=(r>130)&(r>g+12)&(g>b+10)&(a>0)
     direction=row%4;style='overhead' if kind=='signature' and id in ['goku','buu','krillin'] and col<2 else 'forehead' if kind=='signature' and id=='gohan' and col<2 else 'palm'
+    if style_override:style=style_override
     targets={'palm':[(58,53),(26,49),(70,49),(39,43)],'forehead':[(48,31),(38,31),(58,31),(48,31)],'overhead':[(48,6)]*4}
     tx,ty=targets[style][direction];valid=skin&(yy<67)&(yy>(0 if style=='overhead' else 33 if style=='palm' else 10))
     ys,xs=np.where(valid)
@@ -127,7 +128,11 @@ def hand_metadata(image,id,kind,row,col):
         scores=(xs-tx)**2+(ys-ty)**2;k=int(np.argmin(scores));hx,hy=int(xs[k]),int(ys[k])
     else:
         ys,xs=np.where(a>0);k=int(np.argmin((xs-tx)**2+(ys-ty)**2));hx,hy=int(xs[k]),int(ys[k])
-    bbox=image.getbbox();return [*bbox,hx,hy,48,84]
+    bbox=image.getbbox();result=[*bbox,hx,hy,48,84]
+    if style_override is None:
+        result+=hand_metadata(image,id,kind,row,col,'forehead')[4:6]
+        result+=hand_metadata(image,id,kind,row,col,'overhead')[4:6]
+    return result
 
 def write_sheet(key,tiles,rows,source,id,kind):
     out=Image.new('RGBA',(384,rows*96));data=[]
@@ -179,6 +184,12 @@ for name,layout in layouts.items():
             tiles[16+col]=normalized([{'image':body}],HEIGHTS[id] if id=='buu' else 62)[0]
         extraction_report[name]['forwardGait']='existing complete front walk: left,passing,right,passing'
 
+    if name in ['krillin-combat','gohan-combat']:
+        # The original east row turns its back during extension. Mirror the
+        # complete west poses, never paste an arm/head onto the opposite body.
+        for group in [0,4,8]:
+            for col in range(4):tiles[(group+2)*4+col]=ImageOps.mirror(tiles[(group+1)*4+col])
+        extraction_report[name]['eastPoseCorrection']='complete west rows mirrored; discarded back-facing east cells'
     for suffix in ['base'] if enemy else FORMS[id]:
         key=name if suffix=='base' else f'{id}-{suffix}-{kind}'
         frames=[full_variant(t,id,suffix,(i//4)%4,i%4,kind,i//4) for i,t in enumerate(tiles)]
@@ -193,13 +204,38 @@ for id,source,mapping_rows in specs:
         for col in range(4):
             entry=dict(sources[source][(-raw-1 if raw<0 else raw),col]);entry['image']=ImageOps.mirror(entry['image']) if raw<0 else entry['image'];entries.append(entry)
     tiles=normalized(entries,HEIGHTS[id],signature=True)
+    combat=Image.open(DST/f'{id}-combat.png').convert('RGBA')
+    for direction in range(4):
+        # Recover with a guard of the same view. Several signature masters turn
+        # front/back at the end, independent of the target.
+        tiles[direction*4+3]=combat.crop((0,direction*96,96,(direction+1)*96))
+    if id in ['vegeta','gohan']:
+        # The signature release in the source points into the opposite view.
+        # Reuse the complete, directional two-hand release of that same actor.
+        for direction in range(4):
+            tiles[direction*4+2]=combat.crop((96,(8+direction)*96,192,(9+direction)*96))
+        for col in range(4):tiles[8+col]=ImageOps.mirror(tiles[4+col])
+    if id=='buu':
+        for col in range(4):tiles[8+col]=ImageOps.mirror(tiles[4+col])
+    extraction_report[source].setdefault('signatureCorrections',[]).append(id+': full-body directional release and guard recovery')
     for suffix in FORMS[id]:
         key=f'{id}-signature' if suffix=='base' else f'{id}-{suffix}-signature'
         frames=[full_variant(t,id,suffix,i//4,i%4,'signature',i//4) for i,t in enumerate(tiles)]
         write_sheet(key,frames,4,f'source/animation/{source}.png',id,'signature')
-# Keep the existing effect atlas untouched: this correction adds no effects.
-old=json.loads((ROOT/'assets/animation-manifest.json').read_text());manifest += [s for s in old['sheets'] if s['key']=='auras']
+# Beast cells contained disconnected purple tails from the preceding aura row.
+# Keep the complete main pink/white aura; do not clip the actor or recolor it.
+aura_path=ROOT/'assets/packed/effects/auras.png'
+aura=Image.open(aura_path).convert('RGBA')
+for col in range(4):
+    tile=np.array(aura.crop((col*96,5*96,(col+1)*96,6*96)))
+    labels,n=ndimage.label(tile[:,:,3]>=144,STRUCT);areas=np.bincount(labels.ravel());areas[0]=0
+    tile[labels!=areas.argmax()]=0
+    aura.paste(Image.fromarray(tile),(col*96,5*96))
+aura.save(aura_path,optimize=True)
+extraction_report['beast-aura']={'correction':'removed disconnected purple tails from the preceding row; retained the full main pink/white aura in four cells'}
+# Preserve effect manifest entries; combat FX has its own local drawing source.
+old=json.loads((ROOT/'assets/animation-manifest.json').read_text());manifest += [s for s in old['sheets'] if s['key'] in ['auras','combat-fx']]
 (ROOT/'assets/animation-manifest.json').write_text(json.dumps({'version':2,'sheets':manifest},indent=2)+'\n')
 (ROOT/'src/frame-data.js').write_text('// Generated from individually repaired complete sprites. Pixel coordinates in 96px cells.\nexport const FRAME_DATA = '+json.dumps(frame_data,separators=(',',':'))+';\nexport const ART_STATUS = '+json.dumps({s['key']:s.get('artStatus','effect') for s in manifest},separators=(',',':'))+';\n')
-(ROOT/'assets/atlas-repair-report.json').write_text(json.dumps({'sources':extraction_report,'animationSheets':len(manifest)-1,'staticFormSheets':20,'frames':sum(len(v) for v in frame_data.values())},indent=2)+'\n')
+(ROOT/'assets/atlas-repair-report.json').write_text(json.dumps({'sources':extraction_report,'animationSheets':98,'staticFormSheets':20,'frames':sum(len(v) for v in frame_data.values())},indent=2)+'\n')
 print('Repaired',len(frame_data),'atlases;',sum(len(v) for v in frame_data.values()),'frames')
